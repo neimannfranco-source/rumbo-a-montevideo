@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rumbo a Montevideo — Español para la final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pasto:#0E4D33;      /* verde profundo, cancha de noche */
+  --pasto-2:#16704A;
+  --boleto:#EEF3E6;     /* papel de entrada, verde muy pálido */
+  --boleto-2:#DDE7D2;
+  --celeste:#74ACDF;
+  --sol:#F5B700;
+  --tinta:#10201A;
+  --sello:#5B3FA0;      /* tinta violeta de sello de pasaporte */
+  --gris:#56665D;
+  --linea:#C9D6C0;
+  --blanco:#FFFFFF;
+  --mal:#B3261E;
+  --display:"Anybody",system-ui,sans-serif;
+  --texto:"Atkinson Hyperlegible",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--boleto);color:var(--tinta);font-family:var(--texto);font-size:18px;line-height:1.55}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sol);outline-offset:2px;border-radius:6px}
+h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.05}
+
+/* ============ HERO: la entrada ============ */
+.hero{background:var(--pasto);color:var(--boleto);padding:28px 20px 44px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 80px,transparent 80px 160px);pointer-events:none}
+.hero-in{max-width:1120px;margin:0 auto;position:relative}
+.brand{font-family:var(--display);font-stretch:125%;font-weight:700;font-size:17px;opacity:.85;margin-bottom:18px}
+.ticket{display:grid;grid-template-columns:1fr 260px;background:var(--boleto);color:var(--tinta);border-radius:18px;
+  box-shadow:0 18px 0 -8px rgba(0,0,0,.18);position:relative}
+.ticket-main{padding:26px 30px 24px}
+.ticket h1{font-stretch:62%;font-weight:900;font-size:clamp(54px,10vw,118px);letter-spacing:-.01em;line-height:.86;color:var(--pasto)}
+.ticket h1 span{display:block;font-stretch:140%;font-weight:800;font-size:.34em;letter-spacing:.01em;color:var(--tinta);margin-bottom:6px}
+.ticket .sub{font-size:18px;max-width:52ch;margin:14px 0 18px;color:#2C3D34}
+.fields{display:grid;grid-template-columns:repeat(4,auto);gap:4px 26px;justify-content:start;border-top:2px dashed var(--linea);padding-top:14px}
+.fields dt{font-size:13.5px;color:var(--gris)}
+.fields dd{margin:0;font-family:var(--display);font-stretch:85%;font-weight:800;font-size:21px}
+.stub{border-left:3px dashed var(--linea);padding:24px 22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;position:relative}
+.stub::before,.stub::after{content:"";position:absolute;left:-15px;width:28px;height:28px;border-radius:50%;background:var(--pasto)}
+.stub::before{top:-14px}.stub::after{bottom:-14px}
+.count-n{font-family:var(--display);font-stretch:55%;font-weight:900;font-size:96px;line-height:.8;color:var(--pasto)}
+.count-l{font-size:16px;color:var(--gris)}
+.names label{display:block;font-size:13.5px;color:var(--gris)}
+.names input{width:100%;border:0;border-bottom:2px solid var(--linea);background:transparent;padding:3px 0 4px;font-family:var(--display);font-stretch:90%;font-weight:700;font-size:19px}
+.names input:focus{outline:none;border-color:var(--pasto)}
+@media (max-width:820px){
+  .ticket{grid-template-columns:1fr}
+  .stub{border-left:0;border-top:3px dashed var(--linea);flex-direction:row;flex-wrap:wrap;align-items:flex-end}
+  .stub::before{top:-15px;left:-14px}.stub::after{top:-15px;bottom:auto;left:auto;right:-14px}
+  .fields{grid-template-columns:repeat(2,auto)}
+  .ticket-main{padding:22px 20px}
+}
+
+/* ============ PASAPORTE (sellos) ============ */
+.passport{max-width:1120px;margin:26px auto 0;color:var(--boleto)}
+.passport-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.passport-head h2{font-stretch:120%;font-weight:800;font-size:22px}
+.passport-head p{margin:0;font-size:15.5px;opacity:.85}
+.stamps{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:thin}
+.stamp{flex:0 0 auto;width:92px;height:92px;border:0;background:transparent;padding:0;position:relative}
+.stamp svg{width:100%;height:100%;display:block}
+.stamp.got svg{transform:rotate(var(--r))}
+.stamp .slot{fill:none;stroke:rgba(238,243,230,.35);stroke-width:2;stroke-dasharray:5 5}
+.stamp .num{fill:rgba(238,243,230,.55);font-family:var(--display);font-weight:800;font-size:26px}
+.stamp .lab{fill:rgba(238,243,230,.55);font-size:10.5px;font-family:var(--texto)}
+.stamp.got .ink{fill:none;stroke:#C9B8FF;stroke-width:3}
+.stamp.got .ink2{fill:none;stroke:#C9B8FF;stroke-width:1.4}
+.stamp.got text{fill:#E2D8FF}
+.stamp.new svg{animation:thud .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes thud{0%{transform:scale(2.2) rotate(-25deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(var(--r))}}
+
+/* ============ LAYOUT ============ */
+.layout{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:250px 1fr;gap:40px;padding:34px 20px 80px}
+@media (max-width:900px){.layout{grid-template-columns:1fr;gap:16px;padding-top:0}}
+.layout>*{min-width:0}
+.rail{position:sticky;top:16px;align-self:start}
+@media (max-width:900px){.rail{position:sticky;top:0;z-index:20;background:var(--boleto);margin:0 -20px;padding:10px 20px;border-bottom:1px solid var(--linea)}}
+.search{width:100%;border:2px solid var(--linea);background:var(--blanco);border-radius:12px;padding:10px 12px;font-size:16px}
+.search:focus{outline:none;border-color:var(--pasto)}
+.rail h3{font-stretch:110%;font-size:15px;font-weight:800;color:var(--gris);margin:20px 0 6px}
+.route{list-style:none;margin:0;padding:0;position:relative}
+.route::before{content:"";position:absolute;left:13px;top:12px;bottom:12px;border-left:2px dotted var(--pasto-2)}
+.route button,.extras button{width:100%;text-align:left;border:0;background:transparent;display:flex;gap:10px;align-items:center;padding:6px 6px;border-radius:10px;font-size:16.5px}
+.route button:hover,.extras button:hover{background:var(--boleto-2)}
+.route .dot{position:relative;z-index:1;flex:0 0 28px;height:28px;border-radius:50%;background:var(--boleto);border:2px solid var(--pasto-2);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:13px;color:var(--pasto)}
+.route .done .dot{background:var(--sello);border-color:var(--sello);color:#fff}
+.route button[aria-current="page"],.extras button[aria-current="page"]{background:var(--pasto);color:var(--boleto)}
+.route button[aria-current="page"] .dot{background:var(--sol);border-color:var(--sol);color:var(--tinta)}
+.extras{list-style:none;margin:0;padding:0}
+.extras .ic{flex:0 0 28px;text-align:center}
+.toggle{display:flex;gap:8px;align-items:center;margin-top:18px;font-size:15.5px;color:var(--gris)}
+.toggle input{width:20px;height:20px;accent-color:var(--pasto)}
+@media (max-width:900px){
+  .rail h3{display:none}
+  .navrow{display:flex;gap:6px;overflow-x:auto;margin-top:8px;scrollbar-width:none}
+  .navrow::-webkit-scrollbar{display:none}
+  .route,.extras{display:flex;gap:6px}
+  .route::before{display:none}
+  .route button,.extras button{white-space:nowrap;border:1px solid var(--linea);background:var(--blanco);padding:5px 10px 5px 5px;font-size:15px}
+  .route .dot{flex-basis:24px;height:24px;font-size:12px}
+  .toggle{margin-top:8px;font-size:14px}
+}
+
+/* ============ CONTENIDO ============ */
+.content{min-width:0;max-width:780px}
+.stop{font-family:var(--display);font-stretch:110%;font-weight:700;color:var(--pasto-2);font-size:16px;margin-bottom:4px}
+.content h2.title{font-stretch:70%;font-weight:900;font-size:clamp(44px,7vw,72px);line-height:.92;color:var(--pasto)}
+.lede{font-size:19px;color:#2C3D34;margin:12px 0 22px;max-width:58ch}
+
+.modetabs{display:flex;gap:4px;border-bottom:2px solid var(--linea);margin:6px 0 18px;overflow-x:auto;scrollbar-width:none}
+.modetabs button{border:0;background:transparent;padding:9px 14px 10px;font-weight:700;font-size:16px;color:var(--gris);border-bottom:4px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.modetabs button[aria-selected="true"]{color:var(--pasto);border-color:var(--pasto)}
+
+.intro-note{font-size:16px;color:var(--gris);margin:0 0 10px}
+.phrases{list-style:none;margin:0;padding:0;border-top:1px solid var(--linea)}
+.phrases li{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:14px 2px;border-bottom:1px solid var(--linea)}
+.phrases .es{font-weight:700;font-size:20px;line-height:1.3}
+.phrases .pt{color:var(--gris);font-size:16.5px}
+.phrases .pt b{font-weight:400;font-size:12px;border:1px solid var(--linea);border-radius:4px;padding:0 4px;margin-right:6px;vertical-align:2px}
+.phrases .nota{grid-column:1/-1;font-size:15.5px;border-left:3px solid var(--celeste);padding:2px 0 2px 10px;color:#264A66}
+.acts{display:flex;gap:4px;align-items:flex-start;grid-row:1/3;grid-column:2}
+.ib{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--linea);background:var(--blanco);display:grid;place-items:center;padding:0}
+.ib:hover{border-color:var(--pasto)}
+.ib svg{width:18px;height:18px}
+.ib.on{background:var(--sol);border-color:var(--sol)}
+.hide-pt .phrases .pt,.hide-pt .gloss .pt,.hide-pt .chat .pt{filter:blur(6px);cursor:pointer;user-select:none}
+.hide-pt .revealed{filter:none!important}
+
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin:0;border-top:1px solid var(--linea)}
+@media (max-width:560px){.gloss{grid-template-columns:1fr}}
+.gloss div{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--linea)}
+.gloss .es{font-weight:700}
+.gloss .pt{color:var(--gris);font-size:16px;text-align:right}
+.gloss .ib{width:32px;height:32px;flex:0 0 auto}
+.gloss .ib svg{width:15px;height:15px}
+
+/* simulación */
+.chat{display:flex;flex-direction:column;gap:10px}
+.bub{max-width:82%;padding:11px 15px;border-radius:18px;font-size:18px}
+.bub .pt{display:block;font-size:15px;color:var(--gris);margin-top:2px}
+.bub.them{background:var(--blanco);border:1px solid var(--linea);border-bottom-left-radius:4px;align-self:flex-start}
+.bub.me{background:var(--pasto);color:var(--boleto);border-bottom-right-radius:4px;align-self:flex-end}
+.bub.me .pt{color:#B9D3C4}
+.who{font-size:13px;color:var(--gris);margin:0 4px -6px}
+.who.r{align-self:flex-end}
+.choices{display:flex;flex-direction:column;gap:8px;align-self:stretch;margin-top:4px}
+.choices p{margin:0;font-size:15px;color:var(--gris)}
+.opt{text-align:left;border:2px solid var(--pasto-2);background:var(--blanco);border-radius:14px;padding:10px 14px;font-size:17.5px}
+.opt:hover{background:var(--boleto-2)}
+.opt.bad{border-color:var(--mal);background:#FBEDEC;cursor:default}
+.why{font-size:15.5px;color:var(--mal);margin:-2px 0 2px 4px}
+.endsim{margin-top:16px;padding:16px 18px;border-radius:14px;background:var(--boleto-2)}
+
+/* desafío */
+.quiz{background:var(--blanco);border:2px solid var(--pasto);border-radius:20px;padding:22px}
+.qtop{display:flex;justify-content:space-between;gap:10px;color:var(--gris);font-size:15px}
+.pips{display:flex;gap:5px}
+.pips i{width:22px;height:6px;border-radius:3px;background:var(--linea)}
+.pips i.ok{background:var(--pasto-2)}.pips i.no{background:var(--mal)}.pips i.cur{background:var(--sol)}
+.qask{font-size:15.5px;color:var(--gris);margin:16px 0 4px}
+.qtext{font-family:var(--display);font-stretch:85%;font-weight:800;font-size:28px;line-height:1.15;margin-bottom:16px}
+.qopts{display:grid;gap:8px}
+.qopt{text-align:left;border:2px solid var(--linea);background:var(--boleto);border-radius:12px;padding:11px 14px;font-size:17.5px}
+.qopt:hover:not([disabled]){border-color:var(--pasto)}
+.qopt.right{border-color:var(--pasto-2);background:#DFF0E5}
+.qopt.wrong{border-color:var(--mal);background:#FBEDEC}
+.qopt[disabled]{cursor:default}
+.listen{display:inline-flex;gap:10px;align-items:center;border:0;background:var(--pasto);color:var(--boleto);border-radius:99px;padding:12px 20px 12px 14px;font-weight:700;margin-bottom:16px}
+.listen svg{width:22px;height:22px}
+.btn{border:0;border-radius:12px;padding:12px 20px;font-weight:700;font-size:17px}
+.btn.p{background:var(--pasto);color:var(--boleto)}
+.btn.s{background:var(--boleto-2);color:var(--tinta)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.result{text-align:center;padding:10px 0}
+.result .big{font-family:var(--display);font-stretch:60%;font-weight:900;font-size:84px;line-height:1;color:var(--pasto)}
+.result .stampbig{width:150px;height:150px;margin:0 auto 8px}
+.result .stampbig .ink{fill:none;stroke:var(--sello);stroke-width:3}
+.result .stampbig .ink2{fill:none;stroke:var(--sello);stroke-width:1.4}
+.result .stampbig text{fill:var(--sello)}
+.result .stampbig svg{animation:thud .6s cubic-bezier(.2,1.6,.4,1);transform:rotate(-8deg);--r:-8deg}
+
+/* inicio */
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:8px 0 30px}
+@media (max-width:640px){.howto{grid-template-columns:1fr}}
+.howto div{border-top:4px solid var(--pasto);padding-top:10px}
+.howto h4{font-stretch:100%;font-size:20px;font-weight:800;margin-bottom:4px}
+.howto p{margin:0;font-size:16.5px;color:#2C3D34}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;border-top:1px solid var(--linea)}
+@media (max-width:640px){.facts{grid-template-columns:1fr}}
+.facts div{padding:14px 0;border-bottom:1px solid var(--linea)}
+.facts b{display:block;font-family:var(--display);font-stretch:95%;font-size:19px}
+.facts p{margin:2px 0 0;font-size:16.5px;color:#2C3D34}
+h3.sec{font-stretch:105%;font-weight:800;font-size:26px;margin:34px 0 12px;color:var(--pasto)}
+
+/* voseo */
+.conj{width:100%;border-collapse:collapse;background:var(--blanco);border-radius:14px;overflow:hidden;font-size:17px}
+.conj th,.conj td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--linea)}
+.conj th{background:var(--pasto);color:var(--boleto);font-family:var(--display);font-stretch:95%;font-weight:700}
+.conj td.vos{font-weight:700;color:var(--pasto);background:#E6F1E3}
+.conj tr:last-child td{border-bottom:0}
+
+/* números */
+.numgame{background:var(--blanco);border:2px solid var(--pasto);border-radius:20px;padding:22px;text-align:center}
+.numgame .n{font-family:var(--display);font-stretch:55%;font-weight:900;font-size:100px;line-height:1;color:var(--pasto)}
+.numgame .w{font-size:22px;font-weight:700;min-height:34px}
+
+/* montevideo */
+.places{display:grid;gap:0;border-top:1px solid var(--linea)}
+.place{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--linea)}
+@media (max-width:560px){.place{grid-template-columns:1fr;gap:4px}}
+.place h4{font-stretch:80%;font-weight:900;font-size:24px;color:var(--pasto)}
+.place p{margin:0 0 6px;font-size:16.5px}
+.place .say{font-size:16px;color:#264A66;border-left:3px solid var(--celeste);padding-left:10px}
+
+/* ficha */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+@media (max-width:560px){.form{grid-template-columns:1fr}}
+.form label{font-size:14.5px;color:var(--gris);display:block}
+.form input{width:100%;border:2px solid var(--linea);background:var(--blanco);border-radius:10px;padding:9px 11px;font-size:17px}
+.form input:focus{outline:none;border-color:var(--pasto)}
+.showcard{background:var(--blanco);border:3px solid var(--tinta);border-radius:18px;padding:24px}
+.showcard .hdr{font-size:15px;color:var(--gris);margin-bottom:8px}
+.showcard .msg{font-family:var(--display);font-stretch:85%;font-weight:800;font-size:26px;line-height:1.2}
+.showcard .addr{font-family:var(--display);font-stretch:75%;font-weight:900;font-size:36px;color:var(--pasto);margin:10px 0;line-height:1.05}
+.showcard .small{font-size:17px}
+
+/* checklist */
+.check{list-style:none;margin:0;padding:0;border-top:1px solid var(--linea)}
+.check li{border-bottom:1px solid var(--linea)}
+.check label{display:flex;gap:14px;align-items:center;padding:12px 2px;cursor:pointer}
+.check input{width:24px;height:24px;accent-color:var(--pasto);flex:0 0 auto}
+.check .es{font-weight:700}
+.check .pt{color:var(--gris);font-size:15.5px;display:block}
+.check input:checked + span .es{text-decoration:line-through;color:var(--gris)}
+
+.ff{width:100%;border-collapse:collapse;font-size:17px}
+.ff th,.ff td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--linea);vertical-align:top}
+.ff th{font-family:var(--display);font-stretch:95%;font-size:15px;color:var(--gris);font-weight:700;border-bottom:2px solid var(--pasto)}
+.ff td:first-child{font-weight:700;font-size:19px}
+.ff td:last-child{color:var(--mal)}
+
+
+.qhint{color:var(--gris);font-size:16px;margin:-8px 0 14px}
+.scene{background:var(--boleto);border-left:5px solid var(--sol);border-radius:10px;padding:14px 16px;font-size:20px;font-weight:700;margin-bottom:16px;line-height:1.35}
+.why.ok{color:var(--pasto);background:#E6F1E3;border-radius:10px;padding:9px 12px;margin:12px 0 0}
+.build{min-height:58px;border:2px dashed var(--linea);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.build.right{border-style:solid;border-color:var(--pasto-2);background:#DFF0E5}
+.build.wrong{border-style:solid;border-color:var(--mal);background:#FBEDEC}
+.build .ph{color:var(--gris);font-size:15.5px;padding:0 6px}
+.bank{display:flex;flex-wrap:wrap;gap:8px}
+.tok{border:2px solid var(--pasto-2);background:var(--blanco);border-radius:10px;padding:7px 12px;font-size:18px;font-weight:700}
+.tok.in{background:var(--pasto);border-color:var(--pasto);color:var(--boleto)}
+.tok.gone{opacity:.25;border-style:dashed}
+.board{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;background:var(--pasto);color:var(--boleto);border-radius:14px;padding:10px 14px}
+.board .team{display:flex;align-items:center;gap:12px;justify-content:flex-start;font-weight:700;font-size:16px;border-radius:10px;padding:4px 8px;min-width:0}
+.board .team:last-child{justify-content:flex-end}
+.board .team span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board .team b{font-family:var(--display);font-stretch:60%;font-weight:900;font-size:44px;line-height:1;color:var(--sol)}
+.board .team.turn{background:rgba(255,255,255,.14)}
+.board .vs{font-size:13.5px;opacity:.8;text-align:center}
+.board.big .team b{font-size:72px}
+.turnline{font-size:15.5px;color:var(--gris);margin:12px 0 0}
+.mapwrap{border-radius:18px;overflow:hidden;border:2px solid var(--pasto)}
+.map{display:block;width:100%;height:auto;font-family:var(--texto)}
+@media (max-width:640px){.mapwrap{overflow-x:auto}.map{min-width:680px}}
+.map .mlab{font-size:15px;font-weight:700;font-style:italic}
+.map .mriver{font-size:20px;fill:#fff;font-family:var(--display);font-stretch:130%;font-weight:700;letter-spacing:.12em}
+.map .mroad{font-size:12.5px;fill:var(--gris)}
+.map .mnote{font-size:11.5px;fill:var(--gris)}
+.pin{cursor:pointer;outline:none}
+.pin circle{fill:var(--blanco);stroke:var(--pasto);stroke-width:4}
+.pin .plab{font-size:15px;font-weight:700;fill:var(--tinta);paint-order:stroke;stroke:var(--boleto-2);stroke-width:5px;stroke-linejoin:round}
+.pin.sel circle{fill:var(--sol);stroke:var(--tinta)}
+.pin:focus-visible circle{stroke:var(--sello);stroke-width:6}
+.mapcard{padding:18px 0 0}
+.mapcard h4{font-stretch:75%;font-weight:900;font-size:32px;color:var(--pasto)}
+.mapcard p{margin:6px 0 10px;font-size:17px;max-width:62ch}
+.dia{list-style:none;margin:0;padding:0;position:relative}
+.dia::before{content:"";position:absolute;left:21px;top:20px;bottom:20px;border-left:3px dotted var(--pasto-2)}
+.dia>li{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:0 0 26px}
+.dnum{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;background:var(--pasto);color:var(--boleto);display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:20px}
+.dia>li:nth-child(5) .dnum{background:var(--sol);color:var(--tinta)}
+.dh{font-size:15px;color:var(--pasto-2);font-weight:700;margin-top:2px}
+.dia h4{font-stretch:85%;font-weight:900;font-size:28px;margin:2px 0 4px}
+.dia p{margin:0 0 8px;font-size:17px}
+.empty{padding:30px 0;color:var(--gris)}
+.voicebox{margin-top:16px;font-size:14.5px;color:var(--gris)}
+.voicebox label{display:block;margin-bottom:4px}
+.voicebox select{width:100%;border:2px solid var(--linea);background:var(--blanco);border-radius:10px;padding:7px 8px;font:inherit;font-size:15px;color:var(--tinta)}
+.speed{display:flex;gap:4px;margin-top:6px}
+.speed button{flex:1;border:1.5px solid var(--linea);background:var(--blanco);border-radius:8px;padding:5px;font-size:14px}
+.speed button.on{background:var(--pasto);border-color:var(--pasto);color:var(--boleto)}
+.voicebox p{margin:6px 0 0;font-size:13.5px;line-height:1.35}
+@media (max-width:900px){.voicebox{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}.voicebox label{display:none}.voicebox select{width:auto;flex:1;min-width:0}.speed{margin:0}.voicebox p{display:none}}
+footer{background:var(--pasto);color:var(--boleto);padding:26px 20px;font-size:15px}
+footer div{max-width:1120px;margin:0 auto;opacity:.85}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="brand">Rumbo a Montevideo · guía de español para la final</div>
+    <div class="ticket">
+      <div class="ticket-main">
+        <h1><span>Final Libertadores 2026</span>Palmeiras<br>Estudiantes</h1>
+        <p class="sub">Todo el español para el viaje: lo que van a decir, lo que van a escuchar y cómo se habla en Uruguay. Completen las 9 paradas y llenen el pasaporte de sellos.</p>
+        <dl class="fields">
+          <div><dt>Fecha</dt><dd>Sáb. 28 de nov.</dd></div>
+          <div><dt>Hora</dt><dd>17:00</dd></div>
+          <div><dt>Estadio</dt><dd>Centenario</dd></div>
+          <div><dt>Ciudad</dt><dd>Montevideo</dd></div>
+        </dl>
+      </div>
+      <div class="stub">
+        <div><div class="count-n" id="countN">–</div><div class="count-l" id="countL">días para la final</div></div>
+        <div class="names">
+          <label for="n1">Viajero 1</label><input id="n1" placeholder="Nombre" maxlength="24">
+          <label for="n2" style="margin-top:8px">Viajero 2</label><input id="n2" placeholder="Nombre" maxlength="24">
+        </div>
+      </div>
+    </div>
+
+    <section class="passport" aria-label="Pasaporte de sellos">
+      <div class="passport-head"><h2>Pasaporte del hincha</h2><p id="passText">Superen el desafío de cada parada para ganar su sello.</p></div>
+      <div class="stamps" id="stamps"></div>
+    </section>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="rail">
+    <input class="search" id="q" type="search" placeholder="Buscar: baño, ingresso, cuenta…" aria-label="Buscar frases">
+    <div class="navrow">
+      <h3>El recorrido</h3>
+      <ol class="route" id="route"></ol>
+      <h3>Herramientas</h3>
+      <ul class="extras" id="extras"></ul>
+    </div>
+    <label class="toggle"><input type="checkbox" id="hidept"> Ocultar portugués para practicar</label>
+    <div class="voicebox">
+      <label for="voz">Voz del audio</label>
+      <select id="voz"></select>
+      <div class="speed" role="group" aria-label="Velocidad"><button data-rate="0.75">Lento</button><button data-rate="0.9">Normal</button></div>
+      <p id="vozinfo"></p>
+    </div>
+  </aside>
+  <main class="content" id="view" tabindex="-1"></main>
+</div>
+
+<footer><div>Para practicar en casa, en el avión y en la calle. El audio usa la voz en español de tu dispositivo. Los sellos, favoritas y la ficha se guardan solo en este navegador.</div></footer>
+
+<script>
+/* =========================================================
+   CONTENIDO
+   Formato de cada frase: "español|portugués|nota opcional"
+   ========================================================= */
+const M = [
+{id:"basico",t:"Lo básico",ico:"👋",lede:"Saludos, cortesía y las frases que salvan cualquier situación. Empiecen por acá.",
+ decir:[
+ "Buenas. / Buen día.|Oi. / Bom dia.|En Uruguay “buenas” sirve a cualquier hora.",
+ "¿Cómo andás? / ¿Todo bien?|Como vai? / Tudo bem?|“Andás” es voseo: se usa “vos” en lugar de “tú”.",
+ "Mucho gusto, me llamo …|Muito prazer, eu me chamo …",
+ "Somos de Brasil, vinimos para la final.|Somos do Brasil, viemos para a final.",
+ "Perdón, ¿me podés ayudar?|Desculpa, você pode me ajudar?|Con personas mayores: “¿me puede ayudar?”.",
+ "No hablo muy bien español.|Não falo muito bem espanhol.",
+ "¿Podés hablar más despacio?|Você pode falar mais devagar?",
+ "¿Me repetís, por favor?|Pode repetir, por favor?",
+ "¿Cómo se dice … en español?|Como se diz … em espanhol?",
+ "¿Dónde está el baño?|Onde fica o banheiro?",
+ "¿Cuánto sale?|Quanto custa?|“¿Cuánto sale?” es más común que “¿cuánto cuesta?” en el Río de la Plata.",
+ "Dale, perfecto.|Beleza, perfeito.|“Dale” = ok, de acuerdo, vamos.",
+ "Muchas gracias, muy amable.|Muito obrigado, muito gentil.",
+ "Chau, ¡nos vemos!|Tchau, até mais!"
+ ],
+ escuchar:[
+ "¿De dónde son?|De onde vocês são?",
+ "¿En qué te puedo ayudar?|Em que posso te ajudar?",
+ "¿Me entendés?|Você me entende?",
+ "Ahí va. / Enseguida.|Já vai. / Num instante.",
+ "Capaz que sí.|Talvez sim.|“Capaz” = quizás, tal vez.",
+ "No hay drama.|Sem problema."
+ ],
+ vocab:["sí / no|sim / não","hoy|hoje","mañana|amanhã","ayer|ontem","ahora|agora","después|depois","acá / allá|aqui / lá","cerca / lejos|perto / longe","izquierda|esquerda","derecha|direita","derecho (recto)|reto","abierto / cerrado|aberto / fechado","temprano|cedo","la gente|as pessoas"]
+},
+{id:"aeropuerto",t:"Aeropuerto",ico:"✈️",lede:"Del check-in en Brasil a la salida del Aeropuerto de Carrasco: migración, valijas y cómo llegar al centro.",
+ decir:[
+ "¿Dónde es el check-in de esta aerolínea?|Onde é o check-in desta companhia aérea?",
+ "¿Me da un asiento de ventanilla?|Pode me dar um assento na janela?",
+ "Esto es equipaje de mano.|Isto é bagagem de mão.",
+ "¿Por qué puerta embarcamos?|Por qual portão embarcamos?",
+ "Vengo por turismo, a ver la final.|Venho a turismo, para ver a final.|La respuesta típica en migración.",
+ "Me quedo cuatro días.|Vou ficar quatro dias.",
+ "Estamos en un hotel en el Centro.|Estamos num hotel no Centro.",
+ "No tengo nada para declarar.|Não tenho nada a declarar.",
+ "Mi valija no llegó. ¿Dónde hago el reclamo?|Minha mala não chegou. Onde faço a reclamação?|Valija = mala. En otros países dicen “maleta”.",
+ "¿Dónde puedo cambiar plata?|Onde posso trocar dinheiro?",
+ "¿Cómo llego al centro?|Como chego ao centro?",
+ "¿Dónde están los taxis?|Onde ficam os táxis?"
+ ],
+ escuchar:[
+ "Pasaporte, por favor.|Passaporte, por favor.",
+ "¿Cuál es el motivo del viaje?|Qual é o motivo da viagem?",
+ "¿Cuánto tiempo se van a quedar?|Quanto tempo vão ficar?",
+ "¿Dónde se van a hospedar?|Onde vão se hospedar?",
+ "Ponga la valija en la cinta.|Coloque a mala na esteira.",
+ "El vuelo está demorado.|O voo está atrasado.",
+ "¡Siguiente, por favor!|Próximo, por favor!"
+ ],
+ vocab:["el vuelo|o voo","el pasaporte|o passaporte","la valija|a mala","el equipaje|a bagagem","la tarjeta de embarque|o cartão de embarque","la puerta de embarque|o portão de embarque","la cinta|a esteira","la llegada|a chegada","la salida|a partida / a saída","la escala|a conexão","demorado|atrasado","la aduana|a alfândega","migración|imigração","el carrito|o carrinho"]
+},
+{id:"hotel",t:"Hotel",ico:"🛏️",lede:"Check-in, desayuno, wifi y qué decir si algo no funciona en la habitación.",
+ decir:[
+ "Tenemos una reserva a nombre de …|Temos uma reserva em nome de …",
+ "¿A qué hora es el check-out?|A que horas é o check-out?",
+ "¿El desayuno está incluido?|O café da manhã está incluído?|Desayuno = café da manhã.",
+ "¿Cuál es la clave del wifi?|Qual é a senha do wi-fi?|Clave o contraseña = senha.",
+ "¿Me da otra toalla, por favor?|Pode me dar outra toalha, por favor?",
+ "El aire acondicionado no funciona.|O ar-condicionado não funciona.",
+ "No sale agua caliente en la ducha.|Não sai água quente no chuveiro.|Ducha = chuveiro.",
+ "Perdí la tarjeta de la habitación.|Perdi o cartão do quarto.",
+ "¿Podemos dejar las valijas acá hasta la tarde?|Podemos deixar as malas aqui até a tarde?",
+ "¿Nos pide un taxi para las tres?|Pode chamar um táxi para as três?",
+ "¿Hay un supermercado cerca?|Tem um supermercado perto?"
+ ],
+ escuchar:[
+ "¿Me dan un documento?|Podem me dar um documento?",
+ "La habitación todavía no está lista.|O quarto ainda não está pronto.",
+ "El desayuno es de siete a diez.|O café da manhã é das sete às dez.",
+ "Están en el tercer piso.|Vocês estão no terceiro andar.|Piso = andar.",
+ "El check-out es hasta las once.|O check-out é até as onze.",
+ "¿Necesitan algo más?|Precisam de mais alguma coisa?"
+ ],
+ vocab:["la habitación|o quarto","la recepción|a recepção","la llave|a chave","el ascensor|o elevador","el piso|o andar","la planta baja|o térreo","la toalla|a toalha","la almohada|o travesseiro","la frazada|o cobertor","la sábana|o lençol","el jabón|o sabonete","el enchufe|a tomada","el cargador|o carregador","la caja fuerte|o cofre"]
+},
+{id:"moverse",t:"Moverse por la ciudad",ico:"🚌",lede:"Ómnibus, taxis y cómo pedir y entender indicaciones en la calle.",
+ decir:[
+ "¿Qué ómnibus va al Estadio Centenario?|Qual ônibus vai ao Estádio Centenário?|“Ómnibus” (o “bondi”) = ônibus.",
+ "¿Dónde queda la parada?|Onde fica o ponto de ônibus?|Parada = ponto.",
+ "Un boleto, por favor.|Uma passagem, por favor.|Boleto = passagem. ¡No es un boleto bancário!",
+ "¿Me avisás cuando lleguemos?|Você me avisa quando chegarmos?",
+ "Me bajo en la próxima.|Vou descer no próximo.",
+ "A esta dirección, por favor.|Para este endereço, por favor.",
+ "¿Cuánto sale hasta el Centro?|Quanto custa até o Centro?",
+ "Pare acá, por favor.|Pare aqui, por favor.",
+ "¿Se puede ir caminando?|Dá para ir a pé?",
+ "Estoy perdido. ¿Me mostrás en el mapa?|Estou perdido. Pode me mostrar no mapa?"
+ ],
+ escuchar:[
+ "¿A dónde vamos?|Para onde vamos?",
+ "Son dos cuadras para allá.|São dois quarteirões para lá.|Cuadra = quarteirão.",
+ "Seguí derecho y doblá a la izquierda.|Siga reto e vire à esquerda.",
+ "Queda a la vuelta.|Fica logo ali, virando a esquina.",
+ "Hay mucho tránsito.|Tem muito trânsito.",
+ "Te dejo en la esquina.|Te deixo na esquina.",
+ "Bajate en la próxima.|Desce no próximo."
+ ],
+ vocab:["el ómnibus / el bondi|o ônibus","la parada|o ponto","el boleto|a passagem","la terminal|a rodoviária","la calle|a rua","la esquina|a esquina","la cuadra|o quarteirão","la rambla|a orla","el semáforo|o semáforo","el tránsito|o trânsito","caminar|andar a pé","doblar|virar","bajarse|descer","subirse|subir / embarcar"]
+},
+{id:"comer",t:"Comer y beber",ico:"🍽️",lede:"Del chivito al dulce de leche: pedir, preguntar y pagar en restaurantes y bares.",
+ decir:[
+ "Una mesa para dos, por favor.|Uma mesa para dois, por favor.",
+ "¿Nos trae la carta?|Pode nos trazer o cardápio?|Carta o menú = cardápio.",
+ "¿Qué nos recomienda?|O que nos recomenda?",
+ "Dos chivitos al plato, por favor.|Dois chivitos no prato, por favor.|El chivito es el plato emblema de Uruguay.",
+ "La carne, jugosa / a punto / bien cocida.|A carne mal passada / ao ponto / bem passada.",
+ "Un agua sin gas, por favor.|Uma água sem gás, por favor.",
+ "¿Tiene opciones vegetarianas?|Tem opções vegetarianas?",
+ "Sin hielo, por favor.|Sem gelo, por favor.",
+ "¿Nos trae la cuenta, por favor?|Pode nos trazer a conta, por favor?",
+ "¿La propina está incluida?|A gorjeta está incluída?|Propina = gorjeta. Es común dejar alrededor de un 10 %.",
+ "¡Estaba buenísimo!|Estava ótimo!",
+ "Para llevar, por favor.|Para viagem, por favor."
+ ],
+ escuchar:[
+ "¿Mesa para cuántos?|Mesa para quantos?",
+ "¿Qué van a tomar?|O que vão beber?|Aquí “tomar” = beber.",
+ "¿Ya saben qué van a pedir?|Já sabem o que vão pedir?",
+ "Se nos terminó.|Acabou.",
+ "¿Algo más?|Mais alguma coisa?",
+ "¿Efectivo o tarjeta?|Dinheiro ou cartão?"
+ ],
+ vocab:["el chivito|sanduíche típico","el asado|o churrasco","la parrilla|a churrascaria","el pancho|o cachorro-quente","la milanesa|o bife à milanesa","las medialunas|os croissants","el dulce de leche|o doce de leite","la manteca|a manteiga","la frutilla|o morango","el jugo|o suco","el mozo|o garçom","el postre|a sobremesa","el vaso|o copo","la cuenta|a conta"]
+},
+{id:"plata",t:"Plata y compras",ico:"💵",lede:"Cambiar dinero, pagar, pedir el vuelto y comprar camisetas y recuerdos.",
+ decir:[
+ "¿Aceptan reales?|Aceitam reais?",
+ "¿A cuánto está el cambio?|Qual é a cotação?",
+ "¿Dónde hay un cajero?|Onde tem um caixa eletrônico?",
+ "¿Me das el vuelto, por favor?|Pode me dar o troco, por favor?|Vuelto o cambio = troco.",
+ "Solo estoy mirando, gracias.|Só estou olhando, obrigado.",
+ "¿Tenés un talle más grande?|Tem um tamanho maior?|Talle = tamanho (ropa).",
+ "¿Me lo puedo probar?|Posso experimentar?",
+ "¿Me hacés un descuento?|Pode fazer um desconto?",
+ "Está salado.|Está caro.|“Salado” = caro, en jerga rioplatense.",
+ "Me lo llevo.|Vou levar.",
+ "¿Me das una bolsa?|Pode me dar uma sacola?"
+ ],
+ escuchar:[
+ "¿Débito o crédito?|Débito ou crédito?",
+ "Son ochocientos cincuenta.|São oitocentos e cinquenta.",
+ "No tengo cambio, ¿tenés más chico?|Não tenho troco, você tem nota menor?",
+ "¿Querés bolsa?|Quer sacola?",
+ "¿Te lo envuelvo?|Embrulho para você?",
+ "Pasá por caja.|Passe no caixa."
+ ],
+ vocab:["el peso uruguayo|o peso uruguaio","la plata / la guita|o dinheiro / a grana","el vuelto|o troco","la casa de cambio|a casa de câmbio","el cajero|o caixa eletrônico","la tarjeta|o cartão","en efectivo|em dinheiro","barato / caro|barato / caro","el talle|o tamanho","la camiseta|a camisa (de time)","los championes|os tênis","la campera|a jaqueta","la bolsa|a sacola","el recuerdo|a lembrancinha"]
+},
+{id:"partido",t:"Día del partido",ico:"🏟️",lede:"Entrar al Centenario, encontrar el sector y vivir los 90 minutos (o 120, o penales) en español.",
+ decir:[
+ "¿Dónde está la entrada de este sector?|Onde fica a entrada deste setor?",
+ "Tengo la entrada en el celular.|Tenho o ingresso no celular.|Entrada = ingresso.",
+ "¿Por qué puerta tengo que entrar?|Por qual portão tenho que entrar?",
+ "¿Se puede entrar con esto?|Pode entrar com isto?",
+ "Disculpá, ese es mi lugar.|Desculpa, esse é o meu lugar.",
+ "¿A qué hora abren las puertas?|A que horas abrem os portões?",
+ "¡Vamos, Verdão!|Vamos, Verdão!",
+ "¡Fue penal! / ¡Fue mano!|Foi pênalti! / Foi mão!",
+ "¿Cuánto descuento dieron?|Quanto de acréscimo deram?|Descuento = acréscimos.",
+ "Si nos perdemos, nos vemos en la puerta …|Se nos perdermos, a gente se encontra no portão …",
+ "Buen partido, felicitaciones.|Bom jogo, parabéns.|Ser amable con la otra hinchada siempre suma."
+ ],
+ escuchar:[
+ "Entrada y documento, por favor.|Ingresso e documento, por favor.",
+ "Brazos arriba.|Braços para cima.|Revisión de seguridad.",
+ "No se puede entrar con eso.|Não pode entrar com isso.",
+ "Tu sector es por la otra puerta.|Seu setor é pelo outro portão.",
+ "Circulen, por favor.|Circulem, por favor.",
+ "Se va al alargue.|Vai para a prorrogação."
+ ],
+ vocab:["la entrada|o ingresso","la tribuna|a arquibancada","la platea|as cadeiras","la hinchada|a torcida","el hincha|o torcedor","la cancha|o campo","el arco|o gol (as traves)","el golero / el arquero|o goleiro","el juez|o juiz","el penal|o pênalti","el córner|o escanteio","el tiro libre|a cobrança de falta","el alargue|a prorrogação","los penales|os pênaltis","el descuento|os acréscimos","la copa|a taça"]
+},
+{id:"imprevistos",t:"Imprevistos",ico:"🩹",lede:"Farmacia, médico, objetos perdidos y policía. Ojalá no la necesiten, pero mejor saberla. Emergencias: 911.",
+ decir:[
+ "¡Ayuda! Llamen a una ambulancia.|Socorro! Chamem uma ambulância.",
+ "Necesito un médico.|Preciso de um médico.",
+ "Me duele la cabeza / la panza / la garganta.|Estou com dor de cabeça / de barriga / de garganta.|Panza = barriga.",
+ "Soy alérgico a …|Sou alérgico a …",
+ "¿Tiene algo para el dolor de cabeza?|Tem algo para dor de cabeça?",
+ "Perdí el pasaporte / la billetera.|Perdi o passaporte / a carteira.",
+ "Me robaron el celular.|Roubaram meu celular.",
+ "¿Dónde queda la comisaría?|Onde fica a delegacia?",
+ "¿Dónde queda el consulado de Brasil?|Onde fica o consulado do Brasil?",
+ "Perdí a mi amigo. Tiene camiseta verde.|Perdi meu amigo. Ele está de camisa verde.",
+ "Estoy bien, no pasa nada.|Estou bem, não foi nada."
+ ],
+ escuchar:[
+ "¿Qué te pasó?|O que aconteceu com você?",
+ "¿Desde cuándo te duele?|Desde quando dói?",
+ "¿Sos alérgico a algo?|Você é alérgico a alguma coisa?",
+ "Tomá una cada ocho horas.|Tome um a cada oito horas.",
+ "Tenés que hacer la denuncia.|Você tem que fazer o boletim de ocorrência.",
+ "Quedate acá, ya viene la ambulancia.|Fique aqui, a ambulância já está vindo."
+ ],
+ vocab:["la farmacia|a farmácia","la emergencia|o pronto-socorro","el remedio|o remédio","la pastilla|o comprimido","la curita|o band-aid","la fiebre|a febre","el dolor|a dor","la receta|a receita","la policía|a polícia","la comisaría|a delegacia","la denuncia|o boletim de ocorrência","la billetera|a carteira","robar|roubar","perder|perder"]
+},
+{id:"uruguayo",t:"Hablar como uruguayo",ico:"🧉",lede:"Las frases hechas y palabras que van a escuchar en la calle, en el taxi y en la tribuna.",
+ decir:[
+ "¡Ta!|Tá! / Beleza!|La palabra más uruguaya: “está bien”, “ok”, “entendido”.",
+ "¿Qué hacés, bo?|E aí, cara?|“Bo” es como “cara” o “mano”.",
+ "Está de más.|Está demais! / Muito bom!|Significa “genial”, no “sobra”.",
+ "¡Tremendo partido!|Que jogaço!|“Tremendo” = enorme, impresionante.",
+ "Ni ahí.|Nem a pau.|No, para nada.",
+ "Al toque.|Na hora / rapidinho.",
+ "Me quedé de cara.|Fiquei de queixo caído.",
+ "¡Qué embole!|Que tédio!",
+ "Hacer la previa.|Fazer o esquenta.|Juntarse antes del partido.",
+ "No te hagas problema.|Não esquenta.",
+ "Cuesta un ojo de la cara.|Custa os olhos da cara.",
+ "Estar al horno.|Estar ferrado.|Estar en problemas."
+ ],
+ escuchar:[
+ "¿Viste?|Viu?|Muletilla al final de la frase.",
+ "Re lindo.|Muito bonito.|“Re” = muy.",
+ "Pila de gente.|Um monte de gente.",
+ "Tá bárbaro.|Tá ótimo.",
+ "¡Qué golazo, bo!|Que golaço, cara!",
+ "¿Vamos a tomar unos mates?|Vamos tomar um chimarrão?|Si te convidan, devolvé el mate a quien lo sirve."
+ ],
+ vocab:["bo|cara / mano","gurí / gurisa|garoto / garota","botija|criança","capaz|talvez","tranqui|tranquilo","bárbaro|ótimo","pila de|um monte de","re|muito","el laburo|o trampo","la guita|a grana","el termo|a garrafa térmica","el mate|o chimarrão (parecido)"]
+}
+];
+
+/* Simulaciones: ["o",es,pt] = lo que dicen ellos; ["u",[opción correcta, mal, mal]] con [es,pt,por qué] */
+const SIM = {
+aeropuerto:{t:"Migración en Carrasco",who:"Oficial",steps:[
+ ["o","Buenos días. Pasaporte, por favor.","Bom dia. Passaporte, por favor."],
+ ["u",[["Buenos días, acá tiene.","Bom dia, aqui está."],["Chau, ¡gracias!","Tchau, obrigado!","“Chau” es para despedirse, no para saludar."],["Sí, tengo hambre.","Sim, estou com fome.","No responde a lo que te pidieron."]]],
+ ["o","¿Cuál es el motivo del viaje?","Qual é o motivo da viagem?"],
+ ["u",[["Turismo. Venimos a ver la final.","Turismo. Viemos ver a final."],["Mañana a las cinco.","Amanhã às cinco.","Eso responde “¿cuándo?”, no “¿por qué?”."],["Estamos embarazados de alegría.","Estamos envergonhados de alegria.","¡Falso amigo! “Embarazada” = grávida."]]],
+ ["o","¿Cuánto tiempo se van a quedar?","Quanto tempo vão ficar?"],
+ ["u",[["Cuatro días, hasta el martes.","Quatro dias, até terça."],["En un hotel del Centro.","Num hotel do Centro.","Eso responde “¿dónde?”."],["Cuatro años.","Quatro anos.","¡Cuidado! Años no son días."]]],
+ ["o","Perfecto. Bienvenidos a Uruguay. ¡Suerte en la final!","Perfeito. Bem-vindos ao Uruguai. Boa sorte na final!"]
+]},
+hotel:{t:"Check-in en el hotel",who:"Recepción",steps:[
+ ["o","Buenas tardes, ¿en qué los puedo ayudar?","Boa tarde, em que posso ajudar?"],
+ ["u",[["Buenas tardes, tenemos una reserva a nombre de Silva.","Boa tarde, temos uma reserva em nome de Silva."],["Buenas tardes, mi apellido es Pedrinho.","Boa tarde, meu sobrenome é Pedrinho.","“Apellido” = sobrenome, no apelido."],["¿A qué hora sale el ómnibus?","A que horas sai o ônibus?","No es lo que necesitás en la recepción."]]],
+ ["o","Acá está: habitación doble, tres noches. ¿Me dan un documento?","Aqui está: quarto duplo, três noites. Podem me dar um documento?"],
+ ["u",[["Claro, acá están los pasaportes.","Claro, aqui estão os passaportes."],["No, gracias, estoy bien.","Não, obrigado, estou bem.","Te están pidiendo el documento: hay que dárselo."],["¿Cuánto sale el documento?","Quanto custa o documento?","No te lo venden: lo piden para registrarte."]]],
+ ["o","Perfecto. El desayuno es de siete a diez. ¿Necesitan algo más?","Perfeito. O café da manhã é das sete às dez. Precisam de mais alguma coisa?"],
+ ["u",[["Sí, ¿cuál es la clave del wifi?","Sim, qual é a senha do wi-fi?"],["Sí, ¿cuál es la senha del wifi?","Sim, qual é a senha do wi-fi?","“Senha” es portugués: se dice “clave” o “contraseña”."],["Sí, desayuno a las nueve de la noche.","Sim, café da manhã às nove da noite.","El desayuno es de mañana, de siete a diez."]]],
+ ["o","La clave está en la tarjeta de la habitación. ¡Que disfruten!","A senha está no cartão do quarto. Aproveitem!"]
+]},
+moverse:{t:"En el taxi al estadio",who:"Taxista",steps:[
+ ["o","Buenas, ¿a dónde vamos?","Boa, para onde vamos?"],
+ ["u",[["Al Estadio Centenario, por favor.","Para o Estádio Centenário, por favor."],["Me llamo Pedro.","Eu me chamo Pedro.","Te preguntó a dónde vas, no tu nombre."],["Al estadio. ¿Me podés ligar después?","Para o estádio. Pode me ligar depois?","“Ligar” en español es coquetear; “llamar” es telefonear."]]],
+ ["o","¿Vienen por la final? Hay mucho tránsito, capaz que tardamos media hora.","Vieram para a final? Tem muito trânsito, talvez a gente demore meia hora."],
+ ["u",[["Ta, no hay problema.","Tá, sem problema."],["¿Capaz? ¿Usted es capaz de qué?","Capaz? Você é capaz de quê?","En Uruguay “capaz” significa “quizás”."],["Media hora, ¿y cuántos kilos?","Meia hora, e quantos quilos?","No tiene sentido acá."]]],
+ ["o","Bueno, llegamos. Son cuatrocientos pesos.","Bom, chegamos. São quatrocentos pesos."],
+ ["u",[["¿Puedo pagar con tarjeta?","Posso pagar com cartão?"],["Acá tiene la gorjeta.","Aqui está a gorjeta.","“Gorjeta” es portugués: se dice “propina”. Y primero hay que pagar el viaje."],["Tome, cuatro pesos.","Tome, quatro pesos.","Cuatrocientos = 400, no 4."]]],
+ ["o","Sí, ta. ¡Suerte, y que gane el mejor!","Sim, tá. Boa sorte, e que ganhe o melhor!"]
+]},
+comer:{t:"Cena en un parrilla",who:"Mozo",steps:[
+ ["o","Buenas noches, ¿mesa para cuántos?","Boa noite, mesa para quantos?"],
+ ["u",[["Para dos, por favor.","Para dois, por favor."],["Para las ocho.","Para as oito.","Te preguntaron cuántas personas, no la hora."],["Una mesa de escritorio.","Uma mesa de escritório.","“Escritorio” es el mueble de oficina."]]],
+ ["o","Acá tienen la carta. ¿Qué van a tomar?","Aqui está o cardápio. O que vão beber?"],
+ ["u",[["Dos aguas sin gas, por favor.","Duas águas sem gás, por favor."],["Vamos a tomar el ómnibus.","Vamos pegar o ônibus.","Acá “tomar” es beber."],["Dos tazas de cerveza.","Duas xícaras de cerveja.","La taza es para el café; la cerveza va en vaso."]]],
+ ["o","¿Y para comer?","E para comer?"],
+ ["u",[["Dos chivitos al plato, por favor.","Dois chivitos no prato, por favor."],["Dos presuntos, por favor.","Dois presuntos, por favor.","“Presunto” = supuesto. El presunto se dice “jamón”."],["Dos salsas y nada más.","Dois molhos e nada mais.","La salsa no es un plato."]]],
+ ["o","¿Algo más?","Mais alguma coisa?"],
+ ["u",[["No, gracias. ¿Nos trae la cuenta?","Não, obrigado. Pode trazer a conta?"],["Sí, ¿nos trae la conta?","Sim, pode trazer a conta?","“Conta” es portugués: “la cuenta”."],["Sí, la gorjeta, por favor.","Sim, a gorjeta, por favor.","La propina la dejás vos, no la pedís."]]],
+ ["o","Enseguida. ¿Efectivo o tarjeta?","Já trago. Dinheiro ou cartão?"]
+]},
+partido:{t:"Entrada al Centenario",who:"Seguridad",steps:[
+ ["o","Entrada y documento, por favor.","Ingresso e documento, por favor."],
+ ["u",[["Acá están. La entrada está en el celular.","Aqui estão. O ingresso está no celular."],["¿Dónde compro el ingreso?","Onde compro o ingresso?","“Ingresso” es portugués: “entrada”."],["No tengo documento, pero soy de Palmeiras.","Não tenho documento, mas sou do Palmeiras.","Siempre lleven el documento."]]],
+ ["o","Brazos arriba, por favor. ¿Qué tenés en la mochila?","Braços para cima, por favor. O que tem na mochila?"],
+ ["u",[["Una campera y el cargador.","Uma jaqueta e o carregador."],["Tengo hambre.","Estou com fome.","No responde la pregunta."],["Una botella de vidrio.","Uma garrafa de vidro.","Está bien dicho, pero en el estadio no dejan entrar con vidrio."]]],
+ ["o","Listo. Tu sector es por la puerta 8.","Pronto. Seu setor é pelo portão 8."],
+ ["u",[["¿Para dónde queda la puerta 8?","Para que lado fica o portão 8?"],["¿La puerta 8 está fechada?","O portão 8 está fechado?","“Fechar” en español es poner fecha; “fechado” se dice “cerrado”."],["¿Por dónde queda la porta 8?","Por onde fica o portão 8?","“Porta” es portugués: “puerta”."]]],
+ ["o","Seguí derecho y doblá a la derecha. ¡Disfruten el partido!","Siga reto e vire à direita. Aproveitem o jogo!"]
+]},
+imprevistos:{t:"En la farmacia",who:"Farmacéutica",steps:[
+ ["o","Hola, ¿en qué te puedo ayudar?","Oi, em que posso te ajudar?"],
+ ["u",[["Hola, me duele mucho la cabeza.","Oi, estou com muita dor de cabeça."],["Hola, me duele mucho la cabeça.","Oi, estou com muita dor de cabeça.","“Cabeça” es portugués: “cabeza”."],["Hola, quiero una curita para la cabeza.","Oi, quero um band-aid para a cabeça.","Una curita no sirve para el dolor de cabeza."]]],
+ ["o","¿Desde cuándo te duele? ¿Sos alérgico a algún remedio?","Desde quando dói? Você é alérgico a algum remédio?"],
+ ["u",[["Desde ayer. No soy alérgico a nada.","Desde ontem. Não sou alérgico a nada."],["Desde mañana.","Desde amanhã.","“Mañana” es futuro; para el pasado: “ayer”."],["Sí, soy alérgico al fútbol.","Sim, sou alérgico a futebol.","¡Esperemos que no, justo esta semana!"]]],
+ ["o","Te doy estas. Tomá una cada ocho horas, con comida.","Vou te dar estes. Tome um a cada oito horas, com comida."],
+ ["u",[["Perfecto, ¿cuánto es?","Perfeito, quanto é?"],["¿Una cada ocho días?","Um a cada oito dias?","Escuchaste mal: cada ocho horas."],["Gracias, me las tomo todas juntas.","Obrigado, vou tomar todos juntos.","¡No! Una cada ocho horas."]]],
+ ["o","Son trescientos veinte. ¡Que te mejores!","São trezentos e vinte. Melhoras!"]
+]},
+uruguayo:{t:"Charla en la previa",who:"Hincha uruguayo",steps:[
+ ["o","¿Qué hacés, bo? ¿Son brasileros?","E aí, cara? Vocês são brasileiros?"],
+ ["u",[["¡Sí! Somos de São Paulo, de Palmeiras.","Sim! Somos de São Paulo, do Palmeiras."],["¿Bo? No, me llamo Lucas.","Bo? Não, me chamo Lucas.","“Bo” no es un nombre: es como “cara”."],["Nada, gracias.","Nada, obrigado.","“¿Qué hacés?” es un saludo, como “e aí?”."]]],
+ ["o","¡Está de más! ¿Ya probaron el chivito?","Que demais! Já provaram o chivito?"],
+ ["u",[["Todavía no, ¿dónde hay uno bueno?","Ainda não, onde tem um bom?"],["¿Está de más? ¿Sobra algo?","Está sobrando? Sobra alguma coisa?","“Está de más” = genial."],["Sí, el chivito es un animal.","Sim, o cabrito é um animal.","En Uruguay el chivito es un sándwich, no un cabrito."]]],
+ ["o","Acá a la vuelta hay uno tremendo. ¿Vamos al toque?","Aqui na esquina tem um incrível. Vamos já?"],
+ ["u",[["¡Dale, vamos!","Beleza, vamos!"],["¿Al toque? No toqué nada.","Ao toque? Não toquei em nada.","“Al toque” = ya, enseguida."],["¿Tremendo? ¿Es peligroso?","Tremendo? É perigoso?","“Tremendo” acá es “buenísimo”."]]],
+ ["o","Ta, vamos. ¡Y que gane el mejor el sábado!","Tá, vamos. E que ganhe o melhor no sábado!"]
+]},
+basico:{t:"Pedir ayuda en la calle",who:"Señora",steps:[
+ ["o","Hola, ¿estás bien? ¿Necesitás algo?","Oi, tudo bem? Precisa de alguma coisa?"],
+ ["u",[["Sí, perdón. ¿Me podés ayudar? Estoy buscando el hotel.","Sim, desculpa. Pode me ajudar? Estou procurando o hotel."],["Sí, necesito un rato.","Sim, preciso de um rato.","“Rato” en español es un momento, no un ratón."],["No hablo.","Não falo.","Mejor: “No hablo bien español”."]]],
+ ["o","Claro. ¿Tenés la dirección?","Claro. Você tem o endereço?"],
+ ["u",[["Sí, es esta. ¿Queda lejos?","Sim, é este. Fica longe?"],["Sí, tengo el direccionamiento.","Sim, tenho o direcionamento.","Se dice “la dirección”."],["No, tengo el apellido.","Não, tenho o sobrenome.","El apellido no te ayuda a llegar."]]],
+ ["o","No, son tres cuadras. Seguí derecho y es en la esquina.","Não, são três quarteirões. Siga reto e é na esquina."],
+ ["u",[["¡Muchas gracias, muy amable!","Muito obrigado, muito gentil!"],["¿Tres cuadras? ¿Tres cuadros?","Três quadras? Três quadros?","Cuadra = quarteirão."],["Chau, de nada.","Tchau, de nada.","“De nada” lo dice quien recibe las gracias."]]],
+ ["o","De nada. ¡Suerte en la final!","De nada. Boa sorte na final!"]
+]},
+plata:{t:"Comprando una camiseta",who:"Vendedor",steps:[
+ ["o","Hola, ¿te puedo ayudar en algo?","Oi, posso te ajudar em alguma coisa?"],
+ ["u",[["Solo estoy mirando, gracias.","Só estou olhando, obrigado."],["Estoy esquisito, gracias.","Estou esquisito, obrigado.","“Exquisito” en español es delicioso."],["Quiero una oficina.","Quero uma oficina.","“Oficina” en español es escritório."]]],
+ ["o","Dale. Si querés probarte algo, el probador está al fondo.","Beleza. Se quiser experimentar algo, o provador fica no fundo."],
+ ["u",[["¿Tenés esta camiseta en talle M?","Você tem esta camisa no tamanho M?"],["¿Tenés esta camiseta en tamaño de zapato?","Tem esta camisa em tamanho de sapato?","Para ropa se dice “talle”."],["¿Me la puedo probar en el baño?","Posso experimentar no banheiro?","Te dijeron dónde está el probador."]]],
+ ["o","Sí, acá tenés. Sale mil doscientos.","Sim, aqui está. Custa mil e duzentos."],
+ ["u",[["Me la llevo. ¿Puedo pagar con tarjeta?","Vou levar. Posso pagar com cartão?"],["¿Doce pesos? ¡Qué barato!","Doze pesos? Que barato!","Mil doscientos = 1200."],["Me la llevo, pero sin pagar.","Vou levar, mas sem pagar.","¡Eso no!"]]],
+ ["o","Sí, claro. ¿Querés bolsa?","Sim, claro. Quer sacola?"]
+]}
+};
+
+const FALSOS = [
+ ["embarazada","grávida","“embaraçada” = avergonzada"],
+ ["exquisito","delicioso","“esquisito” = raro"],
+ ["oficina","escritório","“oficina” (pt) = taller"],
+ ["escritorio","mesa de trabalho","“escritório” = oficina"],
+ ["apellido","sobrenome","“apelido” = apodo"],
+ ["propina","gorjeta","“propina” (pt) = soborno"],
+ ["rato","momento","“rato” (pt) = ratón"],
+ ["salsa","molho","“salsa” (pt) = perejil"],
+ ["largo","comprido","“largo” (pt) = ancho"],
+ ["cena","jantar","“cena” (pt) = escena"],
+ ["polvo","pó, poeira","“polvo” (pt) = pulpo"],
+ ["borracha","bêbada","“borracha” (pt) = goma de borrar"],
+ ["pelado","careca","“pelado” (pt) = desnudo"],
+ ["presunto","suposto","“presunto” (pt) = jamón"],
+ ["acordar","combinar / lembrar","“acordar” (pt) = despertarse"],
+ ["fechar","datar","“fechar” (pt) = cerrar"],
+ ["ligar","paquerar","“ligar” (pt) = llamar por teléfono"],
+ ["taza","xícara","“taça” = copa"],
+ ["cachorro","filhote","“cachorro” (pt) = perro"],
+ ["vaso","copo","“vaso” (pt) = maceta o inodoro"],
+ ["tirar","jogar fora","“tirar” (pt) = sacar"],
+ ["cuello","pescoço","“coelho” = conejo"]
+];
+
+const VOSEO = [
+ ["ser","tú eres","vos sos","usted es"],
+ ["tener","tú tienes","vos tenés","usted tiene"],
+ ["querer","tú quieres","vos querés","usted quiere"],
+ ["poder","tú puedes","vos podés","usted puede"],
+ ["venir","tú vienes","vos venís","usted viene"],
+ ["hablar","tú hablas","vos hablás","usted habla"],
+ ["saber","tú sabes","vos sabés","usted sabe"],
+ ["ir","tú vas","vos vas","usted va"]
+];
+const IMPER = ["Vení.|Vem.","Mirá.|Olha.","Decime.|Me diz.","Esperá.|Espera.","Tomá.|Toma / Pega.","Escuchá.|Escuta.","Seguí derecho.|Siga reto.","Doblá a la izquierda.|Vire à esquerda."];
+
+const LUGARES = [
+ ["Estadio Centenario","Construido para el primer Mundial, el de 1930. Adentro funciona el Museo del Fútbol. Está en el Parque Batlle.","¿Se puede visitar el Museo del Fútbol?"],
+ ["Ciudad Vieja","El casco histórico: calles peatonales, la Puerta de la Ciudadela y muchos cafés.","¿Por dónde se entra a la Ciudad Vieja?"],
+ ["Mercado del Puerto","Mercado lleno de parrillas. El lugar clásico para probar asado.","¿Qué parrilla nos recomendás?"],
+ ["Plaza Independencia","La plaza central, con el Palacio Salvo y el monumento a Artigas.","¿Nos sacás una foto, por favor?"],
+ ["La Rambla","Paseo enorme junto al Río de la Plata. Ideal para caminar al atardecer.","¿Hasta dónde se puede caminar por la rambla?"],
+ ["Pocitos","Barrio con playa, edificios y restaurantes, frente a la rambla.","¿Qué ómnibus va a Pocitos?"],
+ ["Tres Cruces","La terminal de ómnibus, con shopping adentro.","¿Dónde está la terminal Tres Cruces?"]
+];
+
+const CHECK = [
+ "Pasaporte o documento vigente|Passaporte ou documento válido",
+ "Entrada del partido en el celular|Ingresso do jogo no celular",
+ "Dirección del hotel escrita en papel|Endereço do hotel escrito em papel",
+ "Algo de pesos uruguayos en efectivo|Um pouco de pesos uruguaios em dinheiro",
+ "Tarjeta habilitada para el exterior|Cartão liberado para o exterior",
+ "Cargador y batería portátil|Carregador e bateria portátil",
+ "Adaptador de enchufe|Adaptador de tomada",
+ "Campera liviana para la noche|Jaqueta leve para a noite",
+ "Protector solar y gorra|Protetor solar e boné",
+ "Camiseta de Palmeiras|Camisa do Palmeiras",
+ "Seguro de viaje|Seguro-viagem",
+ "Remedios personales|Remédios pessoais"
+];
+
+const UNI=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
+const DEC=["","","","treinta","cuarenta","cincuenta","sesenta","setenta","ochenta","noventa"];
+const CEN=["","ciento","doscientos","trescientos","cuatrocientos","quinientos","seiscientos","setecientos","ochocientos","novecientos"];
+function n2w(n){
+  if(n<30) return UNI[n];
+  if(n<100){const d=Math.floor(n/10),u=n%10;return DEC[d]+(u?" y "+UNI[u]:"");}
+  if(n===100) return "cien";
+  if(n<1000){const c=Math.floor(n/100),r=n%100;return CEN[c]+(r?" "+n2w(r):"");}
+  const m=Math.floor(n/1000),r=n%1000;return (m===1?"mil":n2w(m)+" mil")+(r?" "+n2w(r):"");
+}
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+const store={get(k,d){try{const v=localStorage.getItem("mvd2-"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+             set(k,v){try{localStorage.setItem("mvd2-"+k,JSON.stringify(v))}catch(e){}}};
+let sellos=new Set(store.get("sellos",[]));
+let fav=new Set(store.get("fav",[]));
+let checks=new Set(store.get("checks",[]));
+let ficha=store.get("ficha",{});
+const split=s=>s.split("|");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+
+const EXTRAS=[
+ {id:"duelo",ico:"🏆",t:"Duelo entre viajeros"},
+ {id:"dia",ico:"📅",t:"El 28, paso a paso"},
+ {id:"voseo",ico:"🗣️",t:"El voseo"},
+ {id:"falsos",ico:"⚠️",t:"Falsos amigos"},
+ {id:"numeros",ico:"🔢",t:"Números y precios"},
+ {id:"montevideo",ico:"📍",t:"Qué ver en Montevideo"},
+ {id:"ficha",ico:"🪪",t:"Ficha para mostrar"},
+ {id:"valija",ico:"🧳",t:"Qué llevar"},
+ {id:"favoritas",ico:"⭐",t:"Mis favoritas"}
+];
+
+/* =========================================================
+   ICONOS
+   ========================================================= */
+const IC={
+ play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+ star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
+ starF:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>'
+};
+
+function stampSVG(m,i,got){
+  const id="sp"+i+(got?"g":"e");
+  if(!got) return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="slot" cx="50" cy="50" r="44"/><text class="num" x="50" y="52" text-anchor="middle">${i+1}</text><text class="lab" x="50" y="70" text-anchor="middle">${esc(m.short)}</text></svg>`;
+  const label=(m.short+" · Montevideo · "+m.short+" · ").toUpperCase();
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="${id}" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0"/></defs>
+   <circle class="ink" cx="50" cy="50" r="45"/><circle class="ink2" cx="50" cy="50" r="27"/>
+   <text style="font-size:8.6px;font-family:var(--display);font-weight:800;letter-spacing:.06em"><textPath href="#${id}" startOffset="0">${esc(label)}</textPath></text>
+   <text x="50" y="49" text-anchor="middle" style="font-size:20px">${m.ico}</text>
+   <text x="50" y="64" text-anchor="middle" style="font-size:9px;font-family:var(--display);font-weight:800">28·11·26</text></svg>`;
+}
+
+/* =========================================================
+   CABECERA: cuenta regresiva, nombres, sellos
+   ========================================================= */
+(function countdown(){
+  const kick=new Date("2026-11-28T17:00:00-03:00"), now=new Date();
+  const ms=kick-now, N=document.getElementById("countN"), L=document.getElementById("countL");
+  if(ms>=86400000){const d=Math.floor(ms/86400000);N.textContent=d;L.textContent=d===1?"día para la final":"días para la final";}
+  else if(ms>0){N.textContent=Math.ceil(ms/3600000)+"h";L.textContent="para el pitazo inicial";}
+  else if(ms>-4*3600000){N.textContent="¡Hoy!";L.textContent="es la final";}
+  else {N.textContent="✓";L.textContent="La final ya se jugó";}
+})();
+["n1","n2"].forEach(id=>{const el=document.getElementById(id);el.value=store.get(id,"");el.addEventListener("input",()=>store.set(id,el.value));});
+
+function renderStamps(newId){
+  const box=document.getElementById("stamps");
+  box.innerHTML=M.map((m,i)=>{const got=sellos.has(m.id);
+    return `<button class="stamp ${got?"got":""} ${newId===m.id?"new":""}" style="--r:${[-12,7,-5,10,-8,4,-14,9,-3][i]}deg" data-go="${m.id}" aria-label="Parada ${i+1}: ${esc(m.t)}${got?" (sello ganado)":""}">${stampSVG(m,i,got)}</button>`}).join("");
+  const n=sellos.size;
+  document.getElementById("passText").textContent = n===0?"Superen el desafío de cada parada para ganar su sello."
+    : n===M.length?"¡Pasaporte completo! Están listos para Montevideo." : `${n} de ${M.length} sellos. ¡Sigan así!`;
+}
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+let cur={view:"inicio",mode:"decir"};
+function parseHash(){
+  const h=(location.hash||"").slice(1);
+  if(!h) return {view:"inicio",mode:"decir"};
+  const [v,md]=h.split("-");
+  if(M.some(m=>m.id===v)) return {view:v,mode:["decir","escuchar","vocab","sim","desafio"].includes(md)?md:"decir"};
+  if(EXTRAS.some(e=>e.id===v)) return {view:v,mode:""};
+  return {view:"inicio",mode:"decir"};
+}
+function setHash(){const h=cur.view==="inicio"?"inicio":(cur.mode?cur.view+"-"+cur.mode:cur.view);try{history.replaceState(null,"","#"+h)}catch(e){}}
+function go(view,mode,scroll=true){
+  cur={view,mode:mode||(M.some(m=>m.id===view)?"decir":"")};
+  document.getElementById("q").value="";
+  setHash(); renderNav(); render();
+  if(scroll){const v=document.getElementById("view");const y=v.getBoundingClientRect().top+window.scrollY-(window.innerWidth<=900?120:20);
+    if(window.scrollY>y||v.getBoundingClientRect().top>window.innerHeight*.6) window.scrollTo({top:y});
+    v.focus({preventScroll:true});}
+}
+window.addEventListener("hashchange",()=>{const p=parseHash();if(p.view!==cur.view||p.mode!==cur.mode){cur=p;renderNav();render();}});
+
+function renderNav(){
+  document.getElementById("route").innerHTML =
+   `<li><button data-go="inicio" ${cur.view==="inicio"?'aria-current="page"':""}><span class="dot">✦</span>Inicio</button></li>`+
+   M.map((m,i)=>`<li class="${sellos.has(m.id)?"done":""}"><button data-go="${m.id}" ${cur.view===m.id?'aria-current="page"':""}><span class="dot">${sellos.has(m.id)?"✓":i+1}</span>${esc(m.t)}</button></li>`).join("");
+  document.getElementById("extras").innerHTML = EXTRAS.map(e=>`<li><button data-go="${e.id}" ${cur.view===e.id?'aria-current="page"':""}><span class="ic">${e.ico}</span>${esc(e.t)}</button></li>`).join("");
+  const a=document.querySelector('.navrow [aria-current="page"]'); if(a&&window.innerWidth<=900) a.scrollIntoView({inline:"center",block:"nearest"});
+}
+
+/* =========================================================
+   PIEZAS
+   ========================================================= */
+function phraseLi(s){
+  const [es,pt,nota]=split(s), on=fav.has(es);
+  return `<li><div class="es">${esc(es)}</div>
+   <div class="acts"><button class="ib" data-say="${esc(es)}" aria-label="Escuchar: ${esc(es)}">${IC.play}</button>
+   <button class="ib ${on?"on":""}" data-fav="${esc(s)}" aria-pressed="${on}" aria-label="Guardar en favoritas">${on?IC.starF:IC.star}</button></div>
+   <div class="pt"><b>PT</b>${esc(pt)}</div>${nota?`<div class="nota">${esc(nota)}</div>`:""}</li>`;
+}
+function glossDiv(s){const [es,pt]=split(s);return `<div><span class="es">${esc(es)}</span><span style="display:flex;gap:8px;align-items:center"><span class="pt">${esc(pt)}</span><button class="ib" data-say="${esc(es)}" aria-label="Escuchar: ${esc(es)}">${IC.play}</button></span></div>`}
+const header=(stop,t,lede)=>`${stop?`<div class="stop">${stop}</div>`:""}<h2 class="title">${esc(t)}</h2>${lede?`<p class="lede">${esc(lede)}</p>`:""}`;
+
+/* =========================================================
+   VISTAS
+   ========================================================= */
+function render(){
+  const v=document.getElementById("view"), q=document.getElementById("q").value.trim();
+  if(q) return renderSearch(q);
+  const m=M.find(x=>x.id===cur.view);
+  if(m) return renderModule(m);
+  ({inicio:renderHome,voseo:renderVoseo,falsos:renderFalsos,numeros:renderNumeros,montevideo:renderMvd,duelo:renderDuelo,dia:renderDia,ficha:renderFicha,valija:renderValija,favoritas:renderFav}[cur.view]||renderHome)();
+}
+
+function renderHome(){
+  document.getElementById("view").innerHTML = header("","Cómo usar esta guía","Nueve paradas en el orden del viaje, del aeropuerto al pitazo final. En cada una hay cinco maneras de practicar.")+
+  `<div class="howto">
+    <div><h4>Escuchen y repitan</h4><p>Cada frase tiene audio. Repítanla en voz alta dos o tres veces, sin leer.</p></div>
+    <div><h4>Simulen la escena</h4><p>En “Simulación” eligen qué responder. Si se equivocan, les explicamos por qué.</p></div>
+    <div><h4>Ganen el sello</h4><p>El desafío tiene 8 preguntas de distintos tipos. Con 6 aciertos, el sello va al pasaporte. Después, jueguen el duelo entre ustedes.</p></div>
+  </div>
+  <button class="btn p" data-go="basico">Empezar por lo básico</button>
+  <h3 class="sec">Antes de viajar, sepan que…</h3>
+  <div class="facts">
+    <div><b>La hora es la misma</b><p>Uruguay está en la misma hora que Brasilia. El partido empieza a las 17:00.</p></div>
+    <div><b>Se habla de “vos”</b><p>“Vos tenés”, “vos querés”, “¿cómo andás?”. Lo explicamos en <button class="linkish" data-go="voseo" style="border:0;background:none;padding:0;color:var(--pasto);font-weight:700;text-decoration:underline">El voseo</button>.</p></div>
+    <div><b>Se paga en pesos uruguayos</b><p>La tarjeta se acepta en casi todos lados; lleven algo de efectivo para el ómnibus y los puestos.</p></div>
+    <div><b>El mate está en todas partes</b><p>Si alguien les convida, se toma y se devuelve a quien lo sirve. “Gracias” significa “ya no quiero más”.</p></div>
+    <div><b>Emergencias: 911</b><p>Tengan la dirección del hotel en el celular y en papel. Usen la <button data-go="ficha" style="border:0;background:none;padding:0;color:var(--pasto);font-weight:700;text-decoration:underline">ficha para mostrar</button>.</p></div>
+    <div><b>Día del partido</b><p>Lleguen temprano, con documento y entrada lista. Acuerden un punto de encuentro por si se separan.</p></div>
+  </div>
+  <h3 class="sec">Las diez frases imprescindibles</h3>
+  <ul class="phrases">${[M[0].decir[4],M[0].decir[5],M[0].decir[7],M[0].decir[9],M[0].decir[10],M[1].decir[4],M[3].decir[0],M[4].decir[8],M[6].decir[1],M[8].decir[0]].map(phraseLi).join("")}</ul>`;
+}
+
+function renderModule(m){
+  const i=M.indexOf(m);
+  const tabs=[["decir","Para decir"],["escuchar","Vas a escuchar"],["vocab","Vocabulario"],["sim","Simulación"],["desafio",sellos.has(m.id)?"Desafío ✓":"Desafío"]];
+  let body="";
+  if(cur.mode==="decir") body=`<p class="intro-note">Lo que ustedes van a necesitar decir. Toquen el parlante para escuchar.</p><ul class="phrases">${m.decir.map(phraseLi).join("")}</ul>`;
+  if(cur.mode==="escuchar") body=`<p class="intro-note">Lo que les van a decir a ustedes. Escúchenlo varias veces para reconocerlo rápido.</p><ul class="phrases">${m.escuchar.map(phraseLi).join("")}</ul>`;
+  if(cur.mode==="vocab") body=`<div class="gloss">${m.vocab.map(glossDiv).join("")}</div>`;
+  if(cur.mode==="sim") body=`<div id="sim"></div>`;
+  if(cur.mode==="desafio") body=`<div id="quiz"></div>`;
+  const next=M[i+1];
+  document.getElementById("view").innerHTML = header(`Parada ${i+1} de ${M.length}`,m.t,m.lede)+
+    `<div class="modetabs" role="tablist">${tabs.map(([k,t])=>`<button role="tab" aria-selected="${cur.mode===k}" data-mode="${k}">${t}</button>`).join("")}</div>${body}
+    ${next&&cur.mode!=="desafio"&&cur.mode!=="sim"?`<div class="row" style="margin-top:26px"><button class="btn s" data-go="${next.id}">Siguiente parada: ${esc(next.t)}</button></div>`:""}`;
+  if(cur.mode==="sim") startSim(m);
+  if(cur.mode==="desafio") startQuiz(m);
+}
+
+/* ---------- Simulación ---------- */
+let S=null;
+function startSim(m){S={m,sim:SIM[m.id],i:0,log:[],bad:[]};advanceSim();}
+function advanceSim(){
+  const st=S.sim.steps;
+  while(S.i<st.length && st[S.i][0]==="o"){S.log.push({who:"o",es:st[S.i][1],pt:st[S.i][2]});S.i++;}
+  drawSim();
+  const last=S.log[S.log.length-1]; if(last&&last.who==="o") speak(last.es);
+}
+function drawSim(){
+  const box=document.getElementById("sim"); if(!box) return;
+  const st=S.sim.steps, step=st[S.i];
+  let h=`<p class="intro-note"><b>${esc(S.sim.t)}.</b> Lean (o escuchen) lo que les dicen y elijan la mejor respuesta.</p><div class="chat">`;
+  let prev="";
+  S.log.forEach(l=>{ if(l.who!==prev) h+=`<div class="who ${l.who==="u"?"r":""}">${l.who==="o"?esc(S.sim.who):"Ustedes"}</div>`; prev=l.who;
+    h+=`<div class="bub ${l.who==="o"?"them":"me"}">${esc(l.es)} ${l.who==="o"?`<button class="ib" style="width:28px;height:28px;display:inline-grid;vertical-align:middle" data-say="${esc(l.es)}" aria-label="Escuchar">${IC.play}</button>`:""}<span class="pt">${esc(l.pt)}</span></div>`;});
+  if(step&&step[0]==="u"){
+    if(!S.order) S.order=shuffle([0,1,2]);
+    h+=`<div class="choices"><p>¿Qué responden?</p>${S.order.map(k=>{const o=step[1][k];const bad=S.bad.includes(k);
+      return `<button class="opt ${bad?"bad":""}" data-opt="${k}" ${bad?"disabled":""}>${esc(o[0])}</button>${bad?`<div class="why">${esc(o[2])}</div>`:""}`}).join("")}</div>`;
+  } else if(!step){
+    h+=`</div><div class="endsim"><b>¡Escena completa!</b> Repítanla en voz alta, uno hace de ${esc(S.sim.who.toLowerCase())} y el otro responde. Después cambien los papeles.
+      <div class="row"><button class="btn s" data-simrestart>Repetir la escena</button><button class="btn p" data-mode="desafio">Ir al desafío</button></div></div>`;
+    box.innerHTML=h; return;
+  }
+  box.innerHTML=h+"</div>";
+}
+function pickSim(k){
+  const step=S.sim.steps[S.i];
+  if(k===0){const o=step[1][0];S.log.push({who:"u",es:o[0],pt:o[1]});S.i++;S.bad=[];S.order=null;advanceSim();}
+  else {if(!S.bad.includes(k))S.bad.push(k);drawSim();}
+}
+
+/* ---------- Desafío y Duelo: motor de preguntas ---------- */
+const SITU = {
+basico:[
+ ["Alguien te habla muy rápido y no entendiste nada. ¿Qué decís?","¿Me repetís, por favor? Más despacio.","De nada, gracias.","Chau, ¡nos vemos!","Pedir que repitan es normal y amable."],
+ ["Querés saber el precio de una botella de agua en un kiosco.","¿Cuánto sale?","¿Cuántos años tiene?","¿Dónde sale?","En el Río de la Plata se pregunta “¿cuánto sale?”."]],
+aeropuerto:[
+ ["En la pantalla dice “DEMORADO” al lado de su vuelo. ¿Qué significa?","Que el vuelo sale más tarde.","Que el vuelo está cancelado.","Que ya terminaron de embarcar.","Demorado = atrasado."],
+ ["El oficial pregunta: “¿Dónde se van a hospedar?”. ¿Qué quiere saber?","En qué hotel van a dormir.","Cuándo vuelven a Brasil.","Si tienen algo para declarar.","Hospedarse = quedarse a dormir."]],
+hotel:[
+ ["En recepción les dicen: “Están en el cuarto piso”. ¿A dónde van?","Al cuarto andar, en ascensor.","A la habitación número 4.","A la planta baja.","Piso = andar."],
+ ["En la ducha no sale agua caliente. ¿Qué dicen en recepción?","No sale agua caliente en la ducha.","Quiero un agua sin gas, por favor.","La ducha está bárbara, gracias.","Ducha = chuveiro."]],
+moverse:[
+ ["El taxista dice: “Te dejo a la vuelta”. ¿Qué va a pasar?","Te deja cerca, doblando la esquina.","Vuelve a buscarte más tarde.","Te lleva de vuelta al hotel.","“A la vuelta” = logo ali, virando a esquina."],
+ ["Quieren bajarse del ómnibus en la próxima parada.","Me bajo en la próxima.","Me subo en la próxima.","Me quedo en la próxima.","Bajarse = descer."]],
+comer:[
+ ["El mozo pregunta: “¿Qué van a tomar?”. Les pregunta por…","las bebidas.","el ómnibus que van a tomar.","la foto que van a sacar.","En el restaurante, “tomar” = beber."],
+ ["Terminaron de comer y quieren pagar.","¿Nos trae la cuenta, por favor?","¿Nos trae la conta, por favor?","¿Nos trae la propina, por favor?","La cuenta = a conta. La propina la dejan ustedes."]],
+plata:[
+ ["La vendedora dice: “Son mil quinientos”. ¿Cuánto tienen que pagar?","1500 pesos","150 pesos","15 pesos","Mil quinientos = 1500."],
+ ["La camiseta les queda chica. ¿Qué piden?","¿Tenés un talle más grande?","¿Tenés un talle más chico?","¿Tenés una bolsa más grande?","Talle = tamanho; más grande = maior."]],
+partido:[
+ ["En el control de seguridad les dicen: “Brazos arriba”. ¿Qué hacen?","Levantan los brazos para la revisión.","Muestran la entrada bien alto.","Suben a la parte alta de la tribuna.","Es la revisión de seguridad antes de entrar."],
+ ["Termina 1 a 1 y el relator dice: “¡Nos vamos al alargue!”.","Hay 30 minutos más de juego.","Se suspende el partido.","Van directo a los penales.","Alargue = prorrogação."]],
+imprevistos:[
+ ["Perdiste la carteira con la plata. ¿Qué decís?","Perdí mi billetera.","Perdí mi borracha.","Perdí mi cachorro.","Billetera = carteira. ¡Borracha y cachorro son falsos amigos!"],
+ ["La farmacéutica dice: “Tomá una cada ocho horas”.","Una pastilla cada 8 horas.","Ocho pastillas por día.","Una pastilla a las 8 de la mañana.","Cada ocho horas = a cada oito horas."]],
+uruguayo:[
+ ["Un uruguayo dice: “Ese partido estuvo de más”. ¿Le gustó?","Sí, le encantó.","No, le sobró tiempo.","No, fue aburrido.","“De más” = genial, demais."],
+ ["Les dicen: “Capaz que llueve a la noche”.","Quizás llueva.","Seguro que llueve.","No va a llover.","Capaz = talvez."]]
+};
+
+const clean=w=>w.replace(/[¿?¡!.,;:]/g,"");
+const usable=s=>{const es=split(s)[0];return !/[\/…]/.test(es);};
+function wordsOf(s){return split(s)[0].split(" ").map(clean).filter(w=>w.length>=4);}
+
+function makeQ(m,type){
+  const mk2=(item,pool,dir,ask)=>{const [es,pt]=split(item);
+    const others=shuffle(pool.filter(x=>x!==item)).slice(0,3).map(split);
+    return dir==="pt2es"?{type:"pick",ask,prompt:pt,answer:es,opts:shuffle([es,...others.map(o=>o[0])]),sayAfter:es}
+                        :{type:"pick",ask,prompt:es,answer:pt,opts:shuffle([pt,...others.map(o=>o[1])]),sayAfter:es};};
+  if(type==="pt2es") return mk2(shuffle(m.decir)[0],m.decir,"pt2es","¿Cómo lo dicen en español?");
+  if(type==="es2pt") return mk2(shuffle(m.escuchar)[0],m.escuchar,"es2pt","Les dicen esto. ¿Qué significa?");
+  if(type==="vocab") return mk2(shuffle(m.vocab)[0],m.vocab,"es2pt","¿Qué significa esta palabra?");
+  if(type==="audio"){const q=mk2(shuffle([...m.escuchar,...m.decir])[0],[...m.escuchar,...m.decir],"es2pt","Escuchen y elijan qué significa.");q.type="audio";q.say=q.prompt;return q;}
+  if(type==="situ"){const s=shuffle(SITU[m.id])[0];return {type:"pick",ask:"¿Qué pasa acá?",scene:true,prompt:s[0],answer:s[1],opts:shuffle([s[1],s[2],s[3]]),why:s[4]};}
+  if(type==="cloze"){
+    const cands=shuffle([...m.decir,...m.escuchar].filter(usable).filter(s=>wordsOf(s).length));
+    const item=cands[0]; const [es,pt]=split(item); const target=shuffle(wordsOf(item))[0];
+    const pool=[...new Set(M.flatMap(x=>[...x.decir,...x.escuchar]).filter(usable).flatMap(wordsOf).map(w=>w.toLowerCase()))].filter(w=>w!==target.toLowerCase());
+    const dist=shuffle(pool).slice(0,3).map(w=>/^[A-ZÁÉÍÓÚÑ]/.test(target)?w[0].toUpperCase()+w.slice(1):w);
+    const shown=es.split(" ").map(tok=>clean(tok)===target?tok.replace(target,"_____"):tok).join(" ");
+    return {type:"pick",ask:"Completen la frase.",prompt:shown,hint:pt,answer:target,opts:shuffle([target,...dist]),sayAfter:es};
+  }
+  if(type==="ordenar"){
+    const cands=shuffle([...m.decir,...m.escuchar].filter(usable).filter(s=>{const n=split(s)[0].split(" ").length;return n>=3&&n<=8;}));
+    const [es,pt]=split(cands[0]); const toks=es.split(" ");
+    let sh=shuffle(toks.map((t,i)=>i)); if(sh.every((v,i)=>v===i)) sh=sh.reverse();
+    return {type:"ordenar",ask:"Ordenen las palabras para decir:",prompt:pt,toks,order:sh,built:[],answer:es,sayAfter:es};
+  }
+}
+const DESAFIO_TIPOS=["situ","ordenar","pt2es","cloze","es2pt","audio","pt2es","vocab"];
+const DUELO_TIPOS=["pt2es","situ","es2pt","cloze","audio","vocab","ordenar"];
+
+let Q=null;
+function startQuiz(m){
+  Q={mode:"desafio",m,qs:DESAFIO_TIPOS.map(t=>makeQ(m,t)),i:0,res:[],answered:null,box:"quiz"};
+  drawQuiz();
+}
+function startDuel(){
+  const qs=[];for(let k=0;k<10;k++){const m=M[Math.floor(Math.random()*M.length)];const q=makeQ(m,DUELO_TIPOS[k%DUELO_TIPOS.length]);q.m=m;qs.push(q);}
+  Q={mode:"duelo",qs,i:0,res:[],answered:null,box:"duel",score:[0,0]};
+  drawQuiz();
+}
+const pname=k=>store.get(k?"n2":"n1","")||(k?"Viajero 2":"Viajero 1");
+
+function qBody(q,a){
+  let h="";
+  if(q.type==="audio"){
+    h+=`<button class="listen" data-say="${esc(q.say)}">${IC.play} Escuchar</button>${a!=null?`<div class="qtext" style="font-size:22px">${esc(q.say)}</div>`:""}`;
+  } else if(q.scene){
+    h+=`<div class="scene">${esc(q.prompt)}</div>`;
+  } else {
+    h+=`<div class="qtext">${esc(q.prompt)}</div>${q.hint?`<div class="qhint">${esc(q.hint)}</div>`:""}`;
+  }
+  if(q.type==="ordenar"){
+    const done=a!=null;
+    h+=`<div class="build ${done?(a?"right":"wrong"):""}">${q.built.length?q.built.map(i=>`<span class="tok in">${esc(q.toks[i])}</span>`).join(""):'<span class="ph">Toquen las palabras en orden…</span>'}</div>`;
+    if(!done){
+      h+=`<div class="bank">${q.order.map(i=>q.built.includes(i)?`<span class="tok gone">${esc(q.toks[i])}</span>`:`<button class="tok" data-tok="${i}">${esc(q.toks[i])}</button>`).join("")}</div>
+       <div class="row"><button class="btn s" data-tokundo ${q.built.length?"":"disabled"}>Borrar la última</button><button class="btn p" data-tokcheck ${q.built.length===q.toks.length?"":"disabled"}>Comprobar</button></div>`;
+    } else if(!a){ h+=`<div class="why ok">Así es: <b>${esc(q.answer)}</b></div>`; }
+    return h;
+  }
+  h+=`<div class="qopts">${q.opts.map((o,k)=>{let c="";if(a!=null){if(o===q.answer)c="right";else if(k===a)c="wrong";}
+     return `<button class="qopt ${c}" data-qopt="${k}" ${a!=null?"disabled":""}>${esc(o)}</button>`}).join("")}</div>`;
+  if(a!=null&&q.why) h+=`<div class="why ok">${esc(q.why)}</div>`;
+  return h;
+}
+
+function drawQuiz(){
+  const box=document.getElementById(Q.box); if(!box) return;
+  const n=Q.qs.length;
+  if(Q.i>=n) return Q.mode==="duelo"?drawDuelEnd(box):drawQuizEnd(box);
+  const q=Q.qs[Q.i], a=Q.answered;
+  const pips=Q.qs.map((_,k)=>`<i class="${k<Q.res.length?(Q.res[k]?"ok":"no"):(k===Q.i?"cur":"")}"></i>`).join("");
+  let top;
+  if(Q.mode==="duelo"){
+    const t=Q.i%2;
+    top=`<div class="board"><div class="team ${t===0?"turn":""}"><span>${esc(pname(0))}</span><b>${Q.score[0]}</b></div><div class="vs">Ronda ${Math.floor(Q.i/2)+1} de 5</div><div class="team ${t===1?"turn":""}"><b>${Q.score[1]}</b><span>${esc(pname(1))}</span></div></div>
+     <div class="turnline">Le toca a <b>${esc(pname(t))}</b> · tema: ${esc(q.m.t)}</div>`;
+  } else top=`<div class="qtop"><span>Pregunta ${Q.i+1} de ${n}</span><span class="pips">${pips}</span></div>`;
+  const nextLbl=Q.i+1<n?(Q.mode==="duelo"?`Turno de ${esc(pname((Q.i+1)%2))}`:"Siguiente pregunta"):"Ver resultado";
+  box.innerHTML=`<div class="quiz">${top}<div class="qask">${esc(q.ask)}</div>${qBody(q,a)}
+    ${a!=null?`<div class="row"><button class="btn p" data-qnext>${nextLbl}</button>${q.sayAfter&&q.type!=="audio"?`<button class="btn s" data-say="${esc(q.sayAfter)}">Escuchar la frase</button>`:""}</div>`:""}</div>`;
+  if(q.type==="audio"&&a==null) setTimeout(()=>speak(q.say),250);
+}
+function answerQ(correct,val){
+  const q=Q.qs[Q.i]; Q.answered=val; Q.res.push(correct);
+  if(Q.mode==="duelo"&&correct) Q.score[Q.i%2]++;
+  if(q.sayAfter&&q.type!=="audio") speak(q.sayAfter);
+  drawQuiz();
+}
+function drawQuizEnd(box){
+  const n=Q.qs.length, ok=Q.res.filter(Boolean).length, pass=ok>=6, idx=M.indexOf(Q.m);
+  let isNew=false; if(pass&&!sellos.has(Q.m.id)){sellos.add(Q.m.id);store.set("sellos",[...sellos]);isNew=true;renderStamps(Q.m.id);renderNav();}
+  const next=M[idx+1];
+  box.innerHTML=`<div class="quiz result">${pass?`<div class="stampbig">${stampSVG(Q.m,idx,true)}</div>`:`<div class="big">${ok}/${n}</div>`}
+    <h3 style="font-stretch:90%;font-size:30px;margin:6px 0">${pass?(isNew?"¡Sello ganado!":"¡Otra vez aprobado!"):"Casi. Necesitan 6 aciertos."}</h3>
+    <p style="color:var(--gris);margin:0 0 6px">${pass?`${ok} de ${n} correctas. El sello de “${esc(Q.m.t)}” ya está en su pasaporte.`:`Tuvieron ${ok} de ${n}. Repasen “Para decir” y “Vas a escuchar” y vuelvan a intentarlo: las preguntas cambian cada vez.`}</p>
+    <div class="row" style="justify-content:center">${pass&&next?`<button class="btn p" data-go="${next.id}">Siguiente parada: ${esc(next.t)}</button>`:""}${pass&&!next?`<button class="btn p" data-go="duelo">Jugar el duelo</button>`:""}<button class="btn ${pass?"s":"p"}" data-quizrestart>Hacer otro desafío</button></div></div>`;
+}
+function drawDuelEnd(box){
+  const [a,b]=Q.score, w=a===b?-1:(a>b?0:1);
+  box.innerHTML=`<div class="quiz result"><div class="board big"><div class="team"><span>${esc(pname(0))}</span><b>${a}</b></div><div class="vs">Final</div><div class="team"><b>${b}</b><span>${esc(pname(1))}</span></div></div>
+   <h3 style="font-stretch:90%;font-size:30px;margin:14px 0 6px">${w<0?"¡Empate! Se define por penales…":"¡Ganó "+esc(pname(w))+"!"}</h3>
+   <p style="color:var(--gris);margin:0 0 6px">${w<0?"Jueguen otra vez para desempatar.":"El que perdió invita el alfajor. 😉"}</p>
+   <div class="row" style="justify-content:center"><button class="btn p" data-duelrestart>${w<0?"Ir a los penales":"Pedir la revancha"}</button></div></div>`;
+}
+
+function renderDuelo(){
+  document.getElementById("view").innerHTML=header("Para jugar de a dos","Duelo entre viajeros","Diez preguntas de todas las paradas, una para cada uno por turno. Pongan sus nombres en la entrada de arriba y pásense el celular.")+
+   `<div id="duel"></div>`;
+  startDuel();
+}
+
+/* ---------- Mapa ---------- */
+const MAPA=[
+ {id:"cv",x:108,y:318,n:"Ciudad Vieja",d:"El casco histórico, en la punta de la península: calles peatonales, la Puerta de la Ciudadela y el Mercado del Puerto, lleno de parrillas.",s:["¿Qué parrilla nos recomendás?|Qual churrascaria você recomenda?","¿Por dónde se entra a la Ciudad Vieja?|Por onde se entra na Cidade Velha?"]},
+ {id:"pi",x:196,y:296,n:"Plaza Independencia",d:"La plaza central, con el Palacio Salvo y el monumento a Artigas. Desde acá empieza la avenida 18 de Julio.",s:["¿Nos sacás una foto, por favor?|Pode tirar uma foto da gente, por favor?","¿Esta es la avenida 18 de Julio?|Esta é a avenida 18 de Julho?"]},
+ {id:"tc",x:352,y:226,n:"Tres Cruces",d:"La terminal de ómnibus, con shopping adentro. Un buen punto de referencia en la ciudad.",s:["¿Dónde está la terminal Tres Cruces?|Onde fica a rodoviária Tres Cruces?"]},
+ {id:"ec",x:432,y:252,n:"Estadio Centenario",d:"Construido para el primer Mundial, en 1930. Está en el Parque Batlle y adentro funciona el Museo del Fútbol. ¡Acá se juega la final!",s:["¿Qué ómnibus va al Estadio Centenario?|Qual ônibus vai ao Estádio Centenário?","¿Se puede visitar el Museo del Fútbol?|Dá para visitar o Museu do Futebol?"]},
+ {id:"po",x:492,y:322,n:"Pocitos",d:"Barrio con playa, edificios y restaurantes frente a la rambla. Lindo para caminar al atardecer.",s:["¿Hasta dónde se puede caminar por la rambla?|Até onde dá para caminhar pela orla?"]},
+ {id:"ap",x:742,y:196,n:"Aeropuerto de Carrasco",d:"El aeropuerto internacional, al este de la ciudad. Al centro se llega en taxi, app o ómnibus.",s:["¿Cuánto sale un taxi al centro?|Quanto custa um táxi até o centro?","¿Dónde para el ómnibus al centro?|Onde para o ônibus para o centro?"]}
+];
+let mapSel="ec";
+function mapSVG(){
+  return `<svg class="map" viewBox="0 130 800 310" role="img" aria-label="Mapa esquemático de Montevideo">
+   <rect y="130" width="800" height="310" fill="var(--boleto-2)"/>
+   <path d="M0,300 C30,300 50,312 70,318 C90,330 125,336 150,322 C175,306 215,300 260,306 C320,314 360,304 410,312 C450,318 470,336 505,330 C560,320 600,302 660,300 C720,298 760,292 800,290 L800,440 L0,440 Z" fill="var(--celeste)" opacity=".55"/>
+   <path d="M0,300 C30,300 50,312 70,318 C90,330 125,336 150,322 C175,306 215,300 260,306 C320,314 360,304 410,312 C450,318 470,336 505,330 C560,320 600,302 660,300 C720,298 760,292 800,290" fill="none" stroke="var(--pasto-2)" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
+   <text x="620" y="320" class="mlab" fill="var(--pasto)">la Rambla</text>
+   <text x="300" y="395" class="mriver">Río de la Plata</text>
+   <path d="M196,296 C250,270 300,240 352,226" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+   <path d="M352,226 C420,218 520,210 600,204 C660,200 700,198 742,196" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+   <text x="232" y="262" class="mroad" transform="rotate(-26 232 262)">Av. 18 de Julio</text>
+   <text x="560" y="198" class="mroad">Av. Italia</text>
+   <ellipse cx="432" cy="254" rx="44" ry="30" fill="#BFD6B4"/>
+   <text x="432" y="236" class="mroad" text-anchor="middle" dy="-30">Parque Batlle</text>
+   ${MAPA.map(p=>`<g class="pin ${p.id===mapSel?"sel":""}" data-pin="${p.id}" tabindex="0" role="button" aria-label="${esc(p.n)}">
+     <circle cx="${p.x}" cy="${p.y}" r="${p.id==="ec"?15:11}"/>${p.id==="ec"?`<text x="${p.x}" y="${p.y+5}" text-anchor="middle" style="font-size:14px">⚽</text>`:""}
+     ${(()=>{const L={tc:[-16,5,"end"],po:[16,5,"start"],ap:[8,-20,"end"],ec:[0,-22,"middle"]}[p.id]||[0,-18,"middle"];return `<text class="plab" x="${p.x+L[0]}" y="${p.y+L[1]}" text-anchor="${L[2]}">${esc(p.n)}</text>`})()}</g>`).join("")}
+   <text x="790" y="430" text-anchor="end" class="mnote">Mapa esquemático, no está a escala</text>
+  </svg>`;
+}
+function mapDetail(){const p=MAPA.find(x=>x.id===mapSel);
+  return `<div class="mapcard"><h4>${esc(p.n)}</h4><p>${esc(p.d)}</p><ul class="phrases">${p.s.map(phraseLi).join("")}</ul></div>`;}
+
+/* ---------- El 28 paso a paso ---------- */
+const DIA=[
+ ["Por la mañana","Desayuno y control","Revisen que tienen documento y entrada en el celular, y que el celular está cargado. Llevá la ficha del hotel.",["¿A qué hora termina el desayuno?|Até que horas é o café da manhã?","¿Nos guardan las mochilas hasta la noche?|Podem guardar nossas mochilas até a noite?"]],
+ ["Mediodía","Almuerzo liviano","Coman algo antes de salir: en el estadio hay filas largas.",["¿Qué nos recomendás para comer rápido?|O que você recomenda para comer rápido?","Para llevar, por favor.|Para viagem, por favor."]],
+ ["Con varias horas de margen","Salir hacia el Centenario","El día de una final el tránsito y los controles son lentos. Salgan con tiempo y acuerden un punto de encuentro.",["Al Estadio Centenario, por favor.|Para o Estádio Centenário, por favor.","Si nos perdemos, nos vemos en la puerta …|Se nos perdermos, a gente se encontra no portão …"]],
+ ["En la puerta","Seguridad y entrada","Tengan el documento en la mano y la entrada abierta en el celular. Pregunten por su sector.",["¿Por qué puerta tengo que entrar?|Por qual portão tenho que entrar?","¿Se puede entrar con esto?|Pode entrar com isto?"]],
+ ["17:00","El partido","¡A disfrutar! Si hay alargue y penales, puede terminar después de las 19:30.",["¡Vamos, Verdão!|Vamos, Verdão!","¿Cuánto descuento dieron?|Quanto de acréscimo deram?"]],
+ ["Después","La vuelta al hotel","Esperen a que baje la gente. Vayan juntos al punto de encuentro antes de buscar un taxi.",["¿Dónde puedo tomar un taxi?|Onde posso pegar um táxi?","A esta dirección, por favor.|Para este endereço, por favor."]]
+];
+function renderDia(){
+  document.getElementById("view").innerHTML=header("Sábado 28 de noviembre","El 28, paso a paso","Cómo organizar el día de la final, con las frases que van a necesitar en cada momento.")+
+  `<ol class="dia">${DIA.map(([h,t,d,ph],i)=>`<li><div class="dnum">${i+1}</div><div><div class="dh">${esc(h)}</div><h4>${esc(t)}</h4><p>${esc(d)}</p><ul class="phrases">${ph.map(phraseLi).join("")}</ul></div></li>`).join("")}</ol>`;
+}
+
+/* ---------- Extras ---------- */
+function renderVoseo(){
+  document.getElementById("view").innerHTML=header("Herramienta","El voseo","En Uruguay y Argentina casi nadie usa “tú”: se dice “vos”. La forma cambia un poco, pero el significado es el mismo.")+
+  `<table class="conj"><thead><tr><th>Verbo</th><th>Tú</th><th>Vos (Uruguay)</th><th>Usted</th></tr></thead><tbody>
+   ${VOSEO.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="vos">${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table>
+   <p class="intro-note" style="margin-top:14px">El truco: la sílaba fuerte va al final y no cambia la vocal de la raíz. <b>Tienes → tenés</b>, <b>puedes → podés</b>.</p>
+   <h3 class="sec">Órdenes que van a escuchar</h3>
+   <p class="intro-note">En las indicaciones de la calle se usa mucho el imperativo con vos.</p>
+   <div class="gloss">${IMPER.map(glossDiv).join("")}</div>
+   <h3 class="sec">¿Y ustedes qué usan?</h3>
+   <p style="font-size:17px">Con gente joven, “vos” queda natural. Con policías, personal del hotel o personas mayores, “usted” es siempre seguro y amable. “Tú” también lo entienden todos.</p>`;
+}
+function renderFalsos(){
+  document.getElementById("view").innerHTML=header("Herramienta","Falsos amigos","Palabras que se parecen en portugués y en español, pero significan otra cosa. Las más traicioneras para un brasileño.")+
+  `<table class="ff"><thead><tr><th>En español</th><th>Quiere decir</th><th>No confundir con</th></tr></thead><tbody>${FALSOS.map(f=>`<tr><td>${esc(f[0])}</td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")}</tbody></table>`;
+}
+let NUM={n:0,show:false,mode:"precio"};
+function newNum(){const r=NUM.mode==="chico"?Math.floor(Math.random()*100):NUM.mode==="hora"?0:(Math.floor(Math.random()*40)+1)*50;NUM.n=r;NUM.h=Math.floor(Math.random()*12)+1;NUM.mi=[0,15,30,45][Math.floor(Math.random()*4)];NUM.show=false;}
+function horaTxt(h,mi){const base=h===1?"la una":"las "+n2w(h);const tail=mi===0?" en punto":mi===15?" y cuarto":mi===30?" y media":" y cuarenta y cinco";return "Son "+base+tail+"."}
+function renderNumeros(){
+  if(NUM.n===0&&!NUM.h) newNum();
+  const disp=NUM.mode==="hora"?`${NUM.h}:${String(NUM.mi).padStart(2,"0")}`:(NUM.mode==="precio"?"$ ":"")+NUM.n.toLocaleString("es-UY");
+  const word=NUM.mode==="hora"?horaTxt(NUM.h,NUM.mi):(NUM.mode==="precio"?"Son "+n2w(NUM.n)+" pesos.":n2w(NUM.n));
+  document.getElementById("view").innerHTML=header("Herramienta","Números y precios","Los precios en pesos uruguayos tienen números grandes. Practiquen decirlos rápido, como en una caja.")+
+  `<div class="modetabs">${[["precio","Precios"],["chico","Del 0 al 99"],["hora","La hora"]].map(([k,t])=>`<button aria-selected="${NUM.mode===k}" data-num="${k}">${t}</button>`).join("")}</div>
+  <div class="numgame"><div class="intro-note">Díganlo en voz alta y después controlen.</div>
+   <div class="n">${esc(disp)}</div><div class="w">${NUM.show?esc(word):""}</div>
+   <div class="row" style="justify-content:center">${NUM.show?`<button class="btn s" data-say="${esc(word)}">Escuchar</button><button class="btn p" data-numnext>Otro</button>`:`<button class="btn p" data-numshow>Ver cómo se dice</button>`}</div></div>
+  <h3 class="sec">Para no trabarse</h3>
+  <div class="gloss">${["cien|cem","ciento cincuenta|cento e cinquenta","quinientos|quinhentos","setecientos|setecentos","novecientos|novecentos","mil|mil","dos mil quinientos|dois mil e quinhentos","la mitad|a metade"].map(glossDiv).join("")}</div>
+  <p class="intro-note" style="margin-top:12px">Ojo: en español no se dice “y” entre centenas y decenas. <b>Ciento cincuenta</b>, no “ciento y cincuenta”.</p>`;
+}
+function renderMvd(){
+  document.getElementById("view").innerHTML=header("Herramienta","Qué ver en Montevideo","Toquen un punto del mapa para ver qué hay y qué frase usar para llegar o pedir algo ahí.")+
+  `<div class="mapwrap" id="mapwrap">${mapSVG()}</div><div id="mapdet">${mapDetail()}</div>
+   <h3 class="sec">Más lugares</h3>
+   <div class="places">${LUGARES.map(([n,d,s])=>`<div class="place"><h4>${esc(n)}</h4><div><p>${esc(d)}</p><div class="say">${esc(s)} <button class="ib" style="width:28px;height:28px;display:inline-grid;vertical-align:middle" data-say="${esc(s)}" aria-label="Escuchar">${IC.play}</button></div></div></div>`).join("")}</div>`;
+}
+function selectPin(id){mapSel=id;document.getElementById("mapwrap").innerHTML=mapSVG();document.getElementById("mapdet").innerHTML=mapDetail();}
+function renderFicha(){
+  const f=ficha, F=(k,l,p)=>`<div><label for="f-${k}">${l}</label><input id="f-${k}" data-ficha="${k}" value="${esc(f[k]||"")}" placeholder="${esc(p)}"></div>`;
+  const name=[store.get("n1",""),store.get("n2","")].filter(Boolean).join(" y ");
+  document.getElementById("view").innerHTML=header("Herramienta","Ficha para mostrar","Completen los datos una vez. Si se traban, muestren la tarjeta de abajo a un taxista, un policía o cualquier persona.")+
+  `<div class="form">${F("hotel","Nombre del hotel","Hotel …")}${F("dir","Dirección del hotel","Calle, número, barrio")}${F("tel","Teléfono del hotel","+598 …")}${F("contacto","Contacto de emergencia","Nombre y teléfono")}</div>
+   <div class="showcard" id="showcard">${fichaCard(name)}</div>`;
+}
+function fichaCard(name){
+  const f=ficha;
+  return `<div class="hdr">Muéstrele esto, por favor</div>
+   <div class="msg">Hola. ${name?`Somos ${esc(name)}, de Brasil`:"Somos de Brasil"} y no hablamos bien español. Necesitamos ir a:</div>
+   <div class="addr">${esc(f.hotel||"[nombre del hotel]")}<br>${esc(f.dir||"[dirección]")}</div>
+   <div class="small">${f.tel?`Teléfono del hotel: <b>${esc(f.tel)}</b><br>`:""}${f.contacto?`En caso de emergencia: <b>${esc(f.contacto)}</b><br>`:""}¡Muchas gracias!</div>`;
+}
+function renderValija(){
+  const done=CHECK.filter((_,i)=>checks.has(i)).length;
+  document.getElementById("view").innerHTML=header("Herramienta","Qué llevar",`La lista para armar la valija, en español. Van ${done} de ${CHECK.length}.`)+
+  `<ul class="check">${CHECK.map((c,i)=>{const [es,pt]=split(c);return `<li><label><input type="checkbox" data-check="${i}" ${checks.has(i)?"checked":""}><span><span class="es">${esc(es)}</span><span class="pt">${esc(pt)}</span></span></label></li>`}).join("")}</ul>`;
+}
+function renderFav(){
+  const all=[...fav];
+  document.getElementById("view").innerHTML=header("Herramienta","Mis favoritas","Las frases que marcaron con la estrella. Ideal para repasar justo antes de cada situación.")+
+   (all.length?`<ul class="phrases">${all.map(phraseLi).join("")}</ul>`:`<p class="empty">Todavía no hay favoritas. Toquen la estrella de cualquier frase para guardarla acá.</p>`);
+}
+function renderSearch(q){
+  const n=norm(q), out=[];
+  M.forEach(m=>[...m.decir,...m.escuchar,...m.vocab].forEach(s=>{if(norm(s).includes(n)&&!out.includes(s))out.push(s)}));
+  IMPER.forEach(s=>{if(norm(s).includes(n)&&!out.includes(s))out.push(s)});
+  document.getElementById("view").innerHTML=header("Búsqueda",`“${q}”`,out.length?`${out.length} ${out.length===1?"resultado":"resultados"} en español y portugués.`:"")+
+   (out.length?`<ul class="phrases">${out.map(phraseLi).join("")}</ul>`:`<p class="empty">No hay frases con “${esc(q)}”. Prueben con otra palabra, en español o en portugués.</p>`);
+}
+
+/* =========================================================
+   AUDIO
+   ========================================================= */
+let voices=[], rate=store.get("rate",0.9);
+const RANK=l=>/es[-_]UY/i.test(l)?0:/es[-_]AR/i.test(l)?1:/es[-_](419|US|MX|CL|CO|PE)/i.test(l)?2:/^es/i.test(l)?3:9;
+const REG=l=>/UY/i.test(l)?"Uruguay":/AR/i.test(l)?"Argentina":/419|US|MX|CL|CO|PE/i.test(l)?"Latinoamérica":/ES/i.test(l)?"España":"español";
+function loadVoices(){
+  try{voices=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang)).sort((a,b)=>RANK(a.lang)-RANK(b.lang)||(/google|natural|neural|premium|enhanced/i.test(b.name)-/google|natural|neural|premium|enhanced/i.test(a.name)));}catch(e){voices=[]}
+  const sel=document.getElementById("voz"), info=document.getElementById("vozinfo");
+  if(!voices.length){sel.innerHTML='<option>Sin voces en español</option>';sel.disabled=true;info.textContent="Este dispositivo no tiene voces en español. Instalá una en los ajustes de texto a voz.";return;}
+  sel.disabled=false;
+  const saved=store.get("voz","");
+  sel.innerHTML=voices.map((v,i)=>`<option value="${esc(v.name)}">${esc(v.name.replace(/Microsoft |Google |\(.*?\)/g,"").trim())} · ${REG(v.lang)}</option>`).join("");
+  if(saved&&voices.some(v=>v.name===saved)) sel.value=saved;
+  const best=RANK(voices[0].lang);
+  info.textContent = best<=1 ? "Hay voz rioplatense en este dispositivo y ya está elegida." :
+    "Este dispositivo no tiene voz de Uruguay ni de Argentina; se usa la más parecida. En iPhone: Ajustes › Accesibilidad › Contenido leído › Voces › Español (Argentina). En Android: Ajustes › Texto a voz › Google › Instalar datos de voz.";
+}
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+document.getElementById("voz").addEventListener("change",e=>{store.set("voz",e.target.value);speak("Hola, ¿cómo andás? Ta, vamos al estadio.");});
+function paintRate(){document.querySelectorAll(".speed button").forEach(b=>b.classList.toggle("on",+b.dataset.rate===rate));}
+document.querySelector(".speed").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;rate=+b.dataset.rate;store.set("rate",rate);paintRate();speak("Así suena a esta velocidad.");});
+paintRate();
+function speak(t){
+  try{
+    const clean=t.replace(/…/g,"").replace(/\s*\/\s*/g,". ").replace(/\[|\]/g,"");
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(clean);
+    const name=document.getElementById("voz").value;
+    const v=voices.find(v=>v.name===name)||voices[0];
+    if(v){u.voice=v;u.lang=v.lang}else u.lang="es-AR";
+    u.rate=rate; speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* =========================================================
+   EVENTOS
+   ========================================================= */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");
+  if(!t){ const pin=e.target.closest("[data-pin]"); if(pin){selectPin(pin.dataset.pin);return;}
+    const p=e.target.closest(".hide-pt .pt"); if(p) p.classList.toggle("revealed"); return; }
+  const d=t.dataset;
+  if(d.say!==undefined){speak(d.say);return;}
+  if(d.go){go(d.go);return;}
+  if(d.mode){cur.mode=d.mode;setHash();render();return;}
+  if(d.fav!==undefined){const k=split(d.fav)[0];
+    if(fav.has(k)){fav.delete(k);}else{fav.add(k);}
+    // guardamos la frase completa para mostrarla en favoritas
+    let full=store.get("favfull",{}); if(fav.has(k)) full[k]=d.fav; else delete full[k]; store.set("favfull",full);
+    store.set("fav",[...fav]);
+    if(cur.view==="favoritas"&&!document.getElementById("q").value){renderFav();return;}
+    const on=fav.has(k); t.classList.toggle("on",on); t.setAttribute("aria-pressed",on); t.innerHTML=on?IC.starF:IC.star; return;}
+  if(d.opt!==undefined){pickSim(+d.opt);return;}
+  if(d.simrestart!==undefined){startSim(S.m);return;}
+  if(d.qopt!==undefined){const q=Q.qs[Q.i];answerQ(q.opts[+d.qopt]===q.answer,+d.qopt);return;}
+  if(d.tok!==undefined){const q=Q.qs[Q.i];q.built.push(+d.tok);speakWord(q.toks[+d.tok]);drawQuiz();return;}
+  if(d.tokundo!==undefined){Q.qs[Q.i].built.pop();drawQuiz();return;}
+  if(d.tokcheck!==undefined){const q=Q.qs[Q.i];const ok=q.built.map(i=>q.toks[i]).join(" ")===q.answer;answerQ(ok,ok);return;}
+  if(d.qnext!==undefined){Q.i++;Q.answered=null;drawQuiz();return;}
+  if(d.quizrestart!==undefined){startQuiz(Q.m);return;}
+  if(d.duelrestart!==undefined){startDuel();return;}
+  if(d.num){NUM.mode=d.num;newNum();renderNumeros();return;}
+  if(d.numshow!==undefined){NUM.show=true;renderNumeros();const w=document.querySelector(".numgame .w");if(w)speak(w.textContent);return;}
+  if(d.numnext!==undefined){newNum();renderNumeros();return;}
+});
+document.addEventListener("input",e=>{
+  if(e.target.dataset&&e.target.dataset.ficha){ficha[e.target.dataset.ficha]=e.target.value;store.set("ficha",ficha);
+    const name=[store.get("n1",""),store.get("n2","")].filter(Boolean).join(" y ");document.getElementById("showcard").innerHTML=fichaCard(name);}
+});
+document.addEventListener("change",e=>{
+  if(e.target.dataset&&e.target.dataset.check!==undefined){const i=+e.target.dataset.check;e.target.checked?checks.add(i):checks.delete(i);store.set("checks",[...checks]);
+    const done=CHECK.filter((_,k)=>checks.has(k)).length;const l=document.querySelector(".lede");if(l)l.textContent=`La lista para armar la valija, en español. Van ${done} de ${CHECK.length}.`;}
+});
+document.addEventListener("keydown",e=>{const pin=e.target.closest&&e.target.closest("[data-pin]");if(pin&&(e.key==="Enter"||e.key===" ")){e.preventDefault();selectPin(pin.dataset.pin);const n=document.querySelector(`[data-pin="${pin.dataset.pin}"]`);if(n)n.focus();}});
+function speakWord(w){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w.replace(/[¿?¡!.,]/g,""));const name=document.getElementById("voz").value;const v=voices.find(v=>v.name===name)||voices[0];if(v){u.voice=v;u.lang=v.lang}else u.lang="es-AR";u.rate=rate;speechSynthesis.speak(u);}catch(e){}}
+document.getElementById("q").addEventListener("input",render);
+const hp=document.getElementById("hidept");
+hp.checked=store.get("hide",false); document.body.classList.toggle("hide-pt",hp.checked);
+hp.addEventListener("change",()=>{document.body.classList.toggle("hide-pt",hp.checked);store.set("hide",hp.checked);});
+
+/* favoritas: reconstruir texto completo */
+(function(){const full=store.get("favfull",{});const orig=phraseLi;
+  window.renderFav=function(){const all=[...fav].map(k=>full[k]||store.get("favfull",{})[k]||k);
+    document.getElementById("view").innerHTML=header("Herramienta","Mis favoritas","Las frases que marcaron con la estrella. Ideal para repasar justo antes de cada situación.")+
+    (all.length?`<ul class="phrases">${all.map(s=>orig(s.includes("|")?s:s+"|")).join("")}</ul>`:`<p class="empty">Todavía no hay favoritas. Toquen la estrella de cualquier frase para guardarla acá.</p>`);};
+  renderFav=window.renderFav;})();
+
+const SHORT={basico:"Básico",aeropuerto:"Aeropuerto",hotel:"Hotel",moverse:"Ciudad",comer:"Comida",plata:"Compras",partido:"Partido",imprevistos:"Ayuda",uruguayo:"Uruguayo"};M.forEach(m=>m.short=SHORT[m.id]);
+cur=parseHash(); renderStamps(); renderNav(); render();
+</script>
+</body>
+</html>
