@@ -1228,21 +1228,53 @@ function loadVoices(){
   info.textContent = best<=1 ? "Hay voz rioplatense en este dispositivo y ya está elegida." :
     "Este dispositivo no tiene voz de Uruguay ni de Argentina; se usa la más parecida. En iPhone: Ajustes › Accesibilidad › Contenido leído › Voces › Español (Argentina). En Android: Ajustes › Texto a voz › Google › Instalar datos de voz.";
 }
-try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices;setTimeout(()=>{if(!voices.length)loadVoices()},800)}catch(e){}
 document.getElementById("voz").addEventListener("change",e=>{store.set("voz",e.target.value);speak("Hola, ¿cómo andás? Ta, vamos al estadio.");});
 function paintRate(){document.querySelectorAll(".speed button").forEach(b=>b.classList.toggle("on",+b.dataset.rate===rate));}
 document.querySelector(".speed").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;rate=+b.dataset.rate;store.set("rate",rate);paintRate();speak("Así suena a esta velocidad.");});
 paintRate();
-function speak(t){
-  try{
-    const clean=t.replace(/…/g,"").replace(/\s*\/\s*/g,". ").replace(/\[|\]/g,"");
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(clean);
+/* Núcleo de audio: evita los fallos silenciosos de Chrome/Safari */
+let curU=null, sayTimer=null, warned=false;
+function audioMsg(txt){
+  let el=document.getElementById("audiomsg");
+  if(!el){el=document.createElement("div");el.id="audiomsg";el.setAttribute("role","status");
+    el.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:92vw;background:#1d2b3a;color:#fff;padding:10px 14px;border-radius:12px;font-size:14.5px;line-height:1.35;z-index:9999;box-shadow:0 4px 18px rgba(0,0,0,.25)";
+    document.body.appendChild(el);}
+  el.textContent=txt; el.style.display="block";
+  clearTimeout(el._t); el._t=setTimeout(()=>el.style.display="none",6000);
+}
+function sayText(text,withVoice){
+  if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined"){
+    audioMsg("Este navegador no tiene audio. Si abrieron el link desde WhatsApp o Instagram, ábranlo en Chrome o Safari.");return;}
+  const ss=window.speechSynthesis;
+  if(!voices.length) loadVoices();
+  const busy=ss.speaking||ss.pending;
+  if(busy) ss.cancel();
+  clearTimeout(sayTimer);
+  // Chrome descarta lo que se pide justo después de cancel(): solo en ese caso esperamos un instante
+  const run=()=>{
+    const u=new SpeechSynthesisUtterance(text);
     const name=document.getElementById("voz").value;
-    const v=voices.find(v=>v.name===name)||voices[0];
-    if(v){u.voice=v;u.lang=v.lang}else u.lang="es-AR";
-    u.rate=rate; speechSynthesis.speak(u);
-  }catch(e){}
+    const v=withVoice===false?null:(voices.find(v=>v.name===name)||voices[0]);
+    if(v){u.voice=v;u.lang=v.lang}else u.lang=(voices[0]&&voices[0].lang)||"es-AR";
+    u.rate=rate; u.volume=1;
+    let started=false;
+    u.onstart=()=>{started=true};
+    u.onerror=e=>{
+      if(e.error==="interrupted"||e.error==="canceled") return;
+      if(withVoice!==false){sayText(text,false);return;} // reintento con la voz por defecto
+      audioMsg("No se pudo reproducir el audio ("+e.error+"). Prueben elegir otra voz en el menú “Voz del audio”.");
+    };
+    curU=u; // referencia global: si no, Chrome a veces lo borra antes de terminar
+    try{ss.resume();}catch(e){}
+    ss.speak(u);
+    setTimeout(()=>{if(!started&&!ss.speaking&&!warned){warned=true;
+      audioMsg("¿No se escucha? Suban el volumen y, en iPhone, saquen el modo silencio (el botón del costado).");}},1500);
+  };
+  if(busy) sayTimer=setTimeout(run,60); else run();
+}
+function speak(t){
+  try{sayText(t.replace(/…/g,"").replace(/\s*\/\s*/g,". ").replace(/\[|\]/g,""));}catch(e){audioMsg("Error de audio: "+e.message);}
 }
 
 /* =========================================================
@@ -1285,7 +1317,7 @@ document.addEventListener("change",e=>{
     const done=CHECK.filter((_,k)=>checks.has(k)).length;const l=document.querySelector(".lede");if(l)l.textContent=`La lista para armar la valija, en español. Van ${done} de ${CHECK.length}.`;}
 });
 document.addEventListener("keydown",e=>{const pin=e.target.closest&&e.target.closest("[data-pin]");if(pin&&(e.key==="Enter"||e.key===" ")){e.preventDefault();selectPin(pin.dataset.pin);const n=document.querySelector(`[data-pin="${pin.dataset.pin}"]`);if(n)n.focus();}});
-function speakWord(w){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w.replace(/[¿?¡!.,]/g,""));const name=document.getElementById("voz").value;const v=voices.find(v=>v.name===name)||voices[0];if(v){u.voice=v;u.lang=v.lang}else u.lang="es-AR";u.rate=rate;speechSynthesis.speak(u);}catch(e){}}
+function speakWord(w){try{sayText(w.replace(/[¿?¡!.,]/g,""));}catch(e){}}
 document.getElementById("q").addEventListener("input",render);
 const hp=document.getElementById("hidept");
 hp.checked=store.get("hide",false); document.body.classList.toggle("hide-pt",hp.checked);
